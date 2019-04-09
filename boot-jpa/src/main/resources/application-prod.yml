@@ -1,0 +1,21 @@
+﻿server:
+  port: 7869
+  context-path: /boot-demo01
+spring:
+  application:
+    name: boot-demo01
+
+  datasource:
+    url: jdbc:mysql://db1:3306/beijingby?useUnicode=true&characterEncoding=utf8
+    username: root
+    password: yq@BJroot123
+    driverClassName: com.mysql.jdbc.Driver
+    tomcat:
+      validation-query: SELECT 1
+      test-while-idle: true
+  jpa:
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    show-sql: true

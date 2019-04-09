@@ -1,0 +1,16 @@
+# Created by .ignore support plugin (hsz.mobi)
+### Example user template template
+### Example user template
+
+# IntelliJ project files
+.idea
+*.iml
+application.pid
+out
+gen
+boot-jpa/src/test/
+boot-jpa/target/
+config-server/target/
+kernel/src/main/resources/
+kernel/src/test/
+kernel/target/
