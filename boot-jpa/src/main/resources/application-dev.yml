@@ -1,5 +1,5 @@
 ﻿﻿server:
-  port: 6070
+  port: 16070
   context-path: /boot-jpa
 spring:
   application:

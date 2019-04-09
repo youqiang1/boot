@@ -1,0 +1,26 @@
+server:
+#  address: 0.0.0.0
+  port: 16000
+
+spring:
+  application:
+    name: REGISTRY
+eureka:
+  instance:
+    leaseExpirationDurationInSeconds: 15
+    prefer-ip-address: true
+    hostname:  ${spring.cloud.client.ipAddress}
+  server:
+    enableSelfPreservation: false
+    evictionIntervalTimerInMs: 4000
+  client:
+    registerWithEureka: false
+    fetchRegistry: false
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+  dashboard:
+    path: /admin
+
+management:
+  security:
+    enabled: false
