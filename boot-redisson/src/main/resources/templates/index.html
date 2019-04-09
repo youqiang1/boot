@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Title</title>
+</head>
+<body>
+<table>
+    <!-- 方法一-->
+    <tr th:each="entries,stat:${models}">
+        <td th:text="${stat.count}"></td>
+        <td th:text="${entries['createTime']}"></td>
+        <td th:text="${entries['username']}"></td>
+        <td th:text="${entries['password']}"></td>
+        <td th:text="${entries['email']}"></td>
+        <td th:text="${entries['phone']}"></td>
+        <td th:text="${entries['sex']}"></td>
+    </tr>
+    <!-- 方法二 if判断失败！-->
+    <tr th:each="model:${models}">
+        <td th:text="${model.username}"></td>
+        <td th:text="${model.password}"></td>
+        <td th:text="${model.createTime}"></td>
+        <td th:text="${model.sex}"></td>
+    </tr>
+</table>
+</body>
+</html>

@@ -1,0 +1,56 @@
+server:
+  port: 16001
+  context-path: /
+
+eureka:
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ipAddress}:${server.port}
+    hostname: ${spring.cloud.client.ipAddress}
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:16000/eureka/
+
+spring:
+  application:
+    name: BOOT-REDISSON
+  datasource:
+    url: jdbc:mysql://localhost:3306/simple_dev?useUnicode=true&characterEncoding=utf8
+    username: root
+    password: root
+    driverClassName: com.mysql.jdbc.Driver
+    tomcat:
+      validation-query: SELECT 1
+      test-while-idle: true
+  jpa:
+    hibernate.ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
+  http:
+    multipart:
+     max-file-size: 100MB
+
+#  redisson 的单机版配置
+  redisson:
+    type: SINGLE
+    address: "redis://192.168.10.114:6379"
+    connectionMinimumIdleSize: 10
+    idleConnectionTimeout: 10000
+    pingTimeout: 1000
+    connectTimeout: 10000
+    timeout: 3000
+    retryAttempts: 3
+    retryInterval: 1500
+    password:
+    subscriptionsPerConnection: 5
+    clientName: null
+    subscriptionConnectionMinimumIdleSize: 1
+    subscriptionConnectionPoolSize: 50
+    connectionPoolSize: 64
+    database: 0
+    dnsMonitoring: false
+    dnsMonitoringInterval: 5000
+    codec: org.redisson.codec.JsonJacksonCodec
+
