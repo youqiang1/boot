@@ -1,0 +1,10 @@
+server:
+  port: 6071
+spring:
+  application:
+    name: boot
+  cloud:
+    config:
+      profile: dev
+      label: master
+      uri: http://localhost:7001/

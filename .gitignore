@@ -14,3 +14,6 @@ config-server/target/
 kernel/src/main/resources/
 kernel/src/test/
 kernel/target/
+config-client/target/
+config-client/src/test/
+logs/
