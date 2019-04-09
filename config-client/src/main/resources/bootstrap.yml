@@ -2,9 +2,9 @@ server:
   port: 16072
 spring:
   application:
-    name: boot
+    name: config-client
   cloud:
     config:
       profile: dev
       label: master
-      uri: http://localhost:7001/
+      uri: http://localhost:16071/

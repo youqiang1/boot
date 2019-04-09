@@ -14,7 +14,7 @@ import javax.sql.DataSource;
 
 /**
  * <p>console 项目的数据库相关的配置</p>
- * @author yq  2018/3/2 10:49
+ * @author youq  2018/3/2 10:49
  */
 @Configuration
 @EnableJpaAuditing
