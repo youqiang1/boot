@@ -1,0 +1,38 @@
+﻿﻿server:
+  port: 16003
+  context-path: /
+
+eureka:
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ipAddress}:${server.port}
+    hostname: ${spring.cloud.client.ipAddress}
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:16000/eureka/
+
+spring:
+  application:
+    name: BOOT-STREAM-KAFKA
+  cloud:
+    stream:
+      kafka:
+        binder:
+          brokers: 192.168.101.168:9092
+          zk-nodes: 192.168.101.168:2181
+          minPartitionCount: 1
+          autoCreateTopics: true
+          autoAddPartitions: true
+      bindings:
+      #生产者
+        user:
+          destination: user-t
+          producer:
+            partitionCount: 1
+      #消费者
+        userRes:
+          destination: user-t
+          group: SingleConsumer
+          consumer:
+            concurrency: 1
+            partitioned: false
