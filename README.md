@@ -41,3 +41,8 @@ springboot
     描述：kafka + protobuf demo
     http端口：16073
     
+####boot-es  
+    名称：boot-es
+    描述：elasticsearch
+    http端口：16074
+    

@@ -104,10 +104,11 @@ public class DateUtils {
      * @author youq  2018/3/15 10:17
      */
     public static long localDateTimeToMillisecond(LocalDateTime localDateTime) {
-        if (localDateTime != null)
+        if (localDateTime != null) {
             return localDateTime.toInstant(ZoneOffset.of("+8")).toEpochMilli();
-        else
+        } else {
             return 0;
+        }
     }
 
     /**
@@ -157,7 +158,9 @@ public class DateUtils {
         if (Objects.nonNull(time)) {
             DateTimeFormatter df = DateTimeFormatter.ofPattern(pattern);
             return df.format(time);
-        } else return "";
+        } else {
+            return "";
+        }
     }
 
     /**
@@ -171,7 +174,9 @@ public class DateUtils {
         if (Objects.nonNull(date)) {
             DateTimeFormatter df = DateTimeFormatter.ofPattern(pattern);
             return df.format(date);
-        } else return "";
+        } else {
+            return "";
+        }
     }
 
     /**
@@ -185,7 +190,9 @@ public class DateUtils {
         if (Objects.nonNull(time)) {
             DateTimeFormatter df = DateTimeFormatter.ofPattern(pattern);
             return df.format(time);
-        } else return "";
+        } else {
+            return "";
+        }
     }
 
     /**
@@ -198,7 +205,9 @@ public class DateUtils {
         if (Objects.nonNull(time)) {
             DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             return df.format(time);
-        } else return "";
+        } else {
+            return "";
+        }
     }
 
     /**
@@ -211,7 +220,9 @@ public class DateUtils {
         if (Objects.nonNull(date)) {
             DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             return df.format(date);
-        } else return "";
+        } else {
+            return "";
+        }
     }
 
     /**
@@ -224,7 +235,9 @@ public class DateUtils {
         if (Objects.nonNull(time)) {
             DateTimeFormatter df = DateTimeFormatter.ofPattern("HH:mm:ss");
             return df.format(time);
-        } else return "";
+        } else {
+            return "";
+        }
     }
 
     /**
@@ -238,7 +251,9 @@ public class DateUtils {
             if (Objects.nonNull(dateTimeStr)) {
                 DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
                 return LocalDateTime.parse(dateTimeStr, df);
-            } else return null;
+            } else {
+                return null;
+            }
         } catch (Exception e) {
             return null;
         }
@@ -255,7 +270,9 @@ public class DateUtils {
             if (Objects.nonNull(dateTimeStr)) {
                 DateTimeFormatter df = DateTimeFormatter.ofPattern(pattern);
                 return LocalDateTime.parse(dateTimeStr, df);
-            } else return null;
+            } else {
+                return null;
+            }
         } catch (Exception e) {
             return null;
         }
@@ -279,7 +296,9 @@ public class DateUtils {
             if (Objects.nonNull(dateDateStr)) {
                 DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                 return LocalDate.parse(dateDateStr, df);
-            } else return null;
+            } else {
+                return null;
+            }
         } catch (Exception e) {
             return null;
         }
