@@ -1,0 +1,13 @@
+server:
+  port: 16071
+spring:
+  application:
+    name: config-server
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/youqiang1/SpringCloudConfig/
+          search-paths: boot
+          username:
+          password:

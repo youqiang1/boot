@@ -28,7 +28,7 @@ public class TestSchedule {
     public void executor() {
         List<Location> list = locationRepository.findAll();
         log.info("listSize: {}", list.size());
-        log.info("paramTest: {}", paramTest);
+        log.info("configParamTest: {}", paramTest);
     }
 
 }
