@@ -1,0 +1,44 @@
+// [START declaration]
+syntax = "proto3";
+
+package message;
+
+option java_package = "com.yq.kafka.proto.user";
+option java_outer_classname = "UserMessage";
+
+// [END declaration]
+
+// [START messages]
+message user {
+    enum Result {
+        succeed = 0;
+        failed = 1;
+    }
+
+    enum Sex {
+        famale = 0;
+        male = 1;
+    }
+
+    message Send {
+        int32 id = 101;
+        string username = 102;
+        string password = 103;
+        int32 age = 104;
+        Sex sex = 105;
+        string phone = 106;
+        string email = 107;
+    };
+
+    message Receive {
+        //结果
+        Result result = 200;
+        int32 userId = 201;
+    };
+
+    string method = 10;
+    string uniqueIden = 11;
+    Send send = 12;
+    Receive receive = 13;
+}
+// [END messages]
