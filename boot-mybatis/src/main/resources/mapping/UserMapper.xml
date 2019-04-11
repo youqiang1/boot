@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yq.mybatis.mapper.UserMapper">
+
+    <select id="findOne" resultType="com.yq.mybatis.entity.User">
+        SELECT *
+        FROM user
+        WHERE id = #{id} and remove = false
+    </select>
+
+    <insert id="save" parameterType="com.yq.mybatis.entity.User">
+        INSERT INTO user (id, create_time, last_modified, remove, username, password, age, sex, phone, email)
+        VALUES (#{id}, #{createTime}, #{lastModified}, #{remove}, #{username}, #{password}, #{age}, #{sex}, #{phone},
+                #{email})
+    </insert>
+    
+    <update id="updateUserEmail" parameterType="com.yq.mybatis.entity.User">
+        update user set email = #{email} where id = #{id}
+    </update>
+
+    <update id="softDelete" >
+        update user set remove = TRUE where id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        delete from user where id = #{id}
+    </delete>
+
+</mapper>

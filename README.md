@@ -46,3 +46,13 @@ springboot
     描述：elasticsearch
     http端口：16074
     
+####boot-task  
+    名称：boot-task
+    描述：schedule
+    http端口：16075
+    
+####boot-mybatis  
+    名称：boot-mybatis
+    描述：springboot+mybatis
+    http端口：16076
+    
