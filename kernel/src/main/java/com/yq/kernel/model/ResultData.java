@@ -1,4 +1,4 @@
-package com.yq.kernel.utils;
+package com.yq.kernel.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,9 +8,8 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 
 /**
- * @Description: 统一的返回数据封装
- * @Date: 2017/11/2 14:14
- * @Author: youq
+ * <p> 统一的返回数据封装</p>
+ * @author youq  2019/4/11 10:30
  */
 @Data
 @Builder

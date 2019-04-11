@@ -4,7 +4,7 @@ import com.yq.jpa.common.SearchType;
 import com.yq.jpa.console.qo.CertificateQO;
 import com.yq.jpa.console.vo.CertificateVO;
 import com.yq.jpa.service.MemberService;
-import com.yq.kernel.utils.ResultData;
+import com.yq.kernel.model.ResultData;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
