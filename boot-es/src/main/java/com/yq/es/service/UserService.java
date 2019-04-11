@@ -181,6 +181,7 @@ public class UserService {
         List<User> users = userRepository.findBySex(sex);
         if (!CollectionUtils.isEmpty(users)) {
             userRepository.delete(users);
+            log.info("删除{}条数据完成", users.size());
         }
     }
 

@@ -6,6 +6,8 @@ import com.yq.es.entity.User;
 import com.yq.es.service.UserService;
 import com.yq.kernel.constants.GlobalConstants;
 import com.yq.kernel.enu.SexEnum;
+import com.yq.kernel.model.ListViewData;
+import com.yq.kernel.model.ResultData;
 import com.yq.kernel.utils.ObjectUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,27 +33,27 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/delete")
-    public String delete(String sex) {
+    public ResultData<?> delete(String sex) {
         userService.delete(SexEnum.valueOf(sex));
-        return GlobalConstants.SUCCESS;
+        return ResultData.success(GlobalConstants.SUCCESS);
     }
 
     @GetMapping("/findAllByData")
-    public String findAllByData(Integer page, Integer size) {
+    public ResultData<?> findAllByData(Integer page, Integer size) {
         List<User> users = userService.findAllByData(page, size);
         log.info("user.size(): {}", users.size());
-        return ObjectUtils.toJson(users);
+        return ResultData.success(ObjectUtils.toJson(users));
     }
 
     @GetMapping("/findAllByTemplate")
-    public String findAllByTemplate() {
+    public ResultData<?> findAllByTemplate() {
         List<User> users = userService.findAllByTemplate();
         log.info("user.size(): {}", users.size());
-        return ObjectUtils.toJson(users);
+        return ResultData.success(users);
     }
 
     @GetMapping("/findPageByTemplate")
-    public String findPageByTemplate(Integer page, Integer size) {
+    public ResultData<?> findPageByTemplate(Integer page, Integer size) {
         //当前时间
         Date curr = new Date();
         //一天前
@@ -73,12 +75,14 @@ public class UserController {
                 .size(size)
                 .build();
         //查询
-        Page<User> users = userService.findPageByTemplate(qo);
-        if (users != null) {
-            log.info("user.size(): {}", users.getTotalElements());
-            return ObjectUtils.toJson(users.getContent());
+        Page<User> userPage = userService.findPageByTemplate(qo);
+        if (userPage != null) {
+            ListViewData<User> listViewData = new ListViewData<>();
+            listViewData.setTotal(userPage.getTotalElements());
+            listViewData.setList(userPage.getContent());
+            return ResultData.success(listViewData);
         } else {
-            return GlobalConstants.FAIL;
+            return ResultData.fail();
         }
     }
 
@@ -87,10 +91,10 @@ public class UserController {
      * @author youq  2019/4/10 16:46
      */
     @GetMapping("/dataSave")
-    public String dataSave() {
+    public ResultData<?> dataSave() {
         List<User> users = buildUsers();
         userService.dataSave(users);
-        return GlobalConstants.SUCCESS;
+        return ResultData.success();
     }
 
     /**
@@ -98,10 +102,10 @@ public class UserController {
      * @author youq  2019/4/10 16:46
      */
     @GetMapping("/bulkSave")
-    public String bulkSave() {
+    public ResultData<?> bulkSave() {
         List<User> users = buildUsers();
         userService.bulkSave(users);
-        return GlobalConstants.SUCCESS;
+        return ResultData.success();
     }
 
     private List<User> buildUsers() {
