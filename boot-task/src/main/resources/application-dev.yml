@@ -1,0 +1,10 @@
+﻿﻿server:
+  port: 16075
+  context-path: /
+spring:
+  application:
+    name: boot-task
+
+test:
+  str: 我是配置test.str的内容
+  hello: 你好
