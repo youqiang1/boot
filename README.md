@@ -21,6 +21,16 @@ springboot
     描述：spring cloud stream kafka demo, eureka client
     http端口：16003
     
+####boot-feign-request  
+    名称：BOOT-FEIGN-REQUEST
+    描述：feign request demo, eureka client
+    http端口：16004
+    
+####boot-feign-response  
+    名称：BOOT-FEIGN-RESPONSE
+    描述：feign response demo, eureka client
+    http端口：16005
+    
 ####boot-jpa  
     名称：boot-jpa
     描述：spring data jpa demo

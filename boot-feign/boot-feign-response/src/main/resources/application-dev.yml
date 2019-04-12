@@ -1,0 +1,30 @@
+﻿﻿server:
+  port: 16005
+  context-path: /
+
+eureka:
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ipAddress}:${server.port}
+    hostname: ${spring.cloud.client.ipAddress}
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:16000/eureka/
+
+spring:
+  application:
+    name: BOOT-FEIGN-RESPONSE
+  datasource:
+    url: jdbc:mysql://localhost:3306/simple_dev?useUnicode=true&characterEncoding=utf8
+    username: root
+    password: root
+    driverClassName: com.mysql.jdbc.Driver
+    tomcat:
+      validation-query: SELECT 1
+      test-while-idle: true
+  jpa:
+    hibernate.ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
