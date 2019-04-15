@@ -12,6 +12,18 @@ import org.elasticsearch.action.bulk.BulkProcessor;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.aggregations.AggregationBuilders;
+import org.elasticsearch.search.aggregations.bucket.terms.StringTerms;
+import org.elasticsearch.search.aggregations.bucket.terms.Terms;
+import org.elasticsearch.search.aggregations.bucket.terms.TermsBuilder;
+import org.elasticsearch.search.aggregations.metrics.sum.InternalSum;
+import org.elasticsearch.search.aggregations.metrics.sum.Sum;
+import org.elasticsearch.search.aggregations.metrics.sum.SumBuilder;
+import org.elasticsearch.search.aggregations.metrics.tophits.TopHits;
+import org.elasticsearch.search.sort.SortBuilder;
+import org.elasticsearch.search.sort.SortBuilders;
+import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
@@ -47,20 +59,20 @@ public class UserService {
 
     /**
      * <p> 使用spring data elasticsearch提供的repository查询数据</p>
-     * @param page 页码
-     * @param size 页大小
+     * @param pageNumber 页码
+     * @param size       页大小
      * @return java.util.List<com.yq.es.entity.User>
      * @author youq  2019/4/10 18:02
      */
-    public List<User> findAllByData(Integer page, Integer size) {
+    public List<User> findAllByData(Integer pageNumber, Integer size) {
         //Pageable
-        Pageable pageable = new PageRequest(page, size,
+        Pageable pageable = new PageRequest(pageNumber, size,
                 new Sort(Sort.Direction.DESC, "createTime"));
         //NativeSearchQueryBuilder
         NativeSearchQueryBuilder builder = new NativeSearchQueryBuilder();
         NativeSearchQuery searchQuery = builder.withPageable(pageable).build();
-        Page<User> users = userRepository.search(searchQuery);
-        return Lists.newArrayList(users);
+        Page<User> page = userRepository.search(searchQuery);
+        return page.getContent();
     }
 
     /**
@@ -147,6 +159,208 @@ public class UserService {
             return returnList;
         }
         return null;
+    }
+
+    /**
+     * <p> sum demo</p>
+     * select sum(age) from user;
+     * @author youq  2019/4/15 11:06
+     */
+    public void sumAge() {
+        String ageSumName = "ageSum";
+        //sum, 其他还有avg,count,max,min
+        SumBuilder ageSumBuilder = AggregationBuilders.sum(ageSumName).field("age");
+        //NativeSearchQueryBuilder
+        NativeSearchQueryBuilder builder = new NativeSearchQueryBuilder();
+        NativeSearchQuery searchQuery = builder.withIndices(ElasticsearchConstant.USER_INDEX)
+                .withTypes(ElasticsearchConstant.USER_TYPE)
+                .addAggregation(ageSumBuilder)
+                .build();
+        Double ageSum = elasticsearchTemplate.query(searchQuery, response -> {
+            InternalSum sumTerms = response.getAggregations().get(ageSumName);
+            if (sumTerms == null) {
+                return 0d;
+            }
+            return sumTerms.value();
+        });
+        log.info("ageSum = {}", ageSum.intValue());
+    }
+
+    /**
+     * <p> group demo</p>
+     * select sex, count(1) from user group by sex;
+     * @author youq  2019/4/15 11:06
+     */
+    public void groupSex() {
+        String sexGroupName = "sexGroup";
+        TermsBuilder sexBuilder = AggregationBuilders.terms(sexGroupName).field("sex");
+        //NativeSearchQueryBuilder
+        NativeSearchQueryBuilder builder = new NativeSearchQueryBuilder();
+        NativeSearchQuery searchQuery = builder.withIndices(ElasticsearchConstant.USER_INDEX)
+                .withTypes(ElasticsearchConstant.USER_TYPE)
+                .addAggregation(sexBuilder)
+                .build();
+        String sexGroup = elasticsearchTemplate.query(searchQuery, response -> {
+            StringTerms sexTerms = response.getAggregations().get(sexGroupName);
+            if (sexTerms == null) {
+                return null;
+            }
+            List<Terms.Bucket> buckets = sexTerms.getBuckets();
+            if (CollectionUtils.isEmpty(buckets)) {
+                return null;
+            } else {
+                StringBuilder sb = new StringBuilder();
+                for (Terms.Bucket sexBucket : buckets) {
+                    sb.append(String.format("%s:%s", sexBucket.getKey(), sexBucket.getDocCount()));
+                    sb.append("\r\n");
+                }
+                return sb.toString();
+            }
+        });
+        log.info("sexGroupResult => {}", sexGroup);
+    }
+
+    /**
+     * <p> group demo 2</p>
+     * select sex, phone, count(1) from user group by sex, phone;
+     * @author youq  2019/4/15 11:06
+     */
+    public void groupSexAndPhone() {
+        String sexGroupName = "sexGroup";
+        String phoneGroupName = "phoneGroup";
+        TermsBuilder sexBuilder = AggregationBuilders.terms(sexGroupName).field("sex");
+        TermsBuilder phoneBuilder = AggregationBuilders.terms(phoneGroupName).field("phone");
+        sexBuilder.subAggregation(phoneBuilder);
+        //NativeSearchQueryBuilder
+        NativeSearchQueryBuilder builder = new NativeSearchQueryBuilder();
+        NativeSearchQuery searchQuery = builder.withIndices(ElasticsearchConstant.USER_INDEX)
+                .withTypes(ElasticsearchConstant.USER_TYPE)
+                .addAggregation(sexBuilder)
+                .build();
+        String sexPhoneGroup = elasticsearchTemplate.query(searchQuery, response -> {
+            StringTerms sexTerms = response.getAggregations().get(sexGroupName);
+            if (sexTerms == null) {
+                return null;
+            }
+            List<Terms.Bucket> buckets = sexTerms.getBuckets();
+            if (CollectionUtils.isEmpty(buckets)) {
+                return null;
+            } else {
+                StringBuilder sb = new StringBuilder();
+                for (Terms.Bucket sexBucket : buckets) {
+                    StringTerms phoneTerms = sexBucket.getAggregations().get(phoneGroupName);
+                    if (phoneTerms == null || CollectionUtils.isEmpty(phoneTerms.getBuckets())) {
+                        continue;
+                    }
+                    for (Terms.Bucket phoneBucket : phoneTerms.getBuckets()) {
+                        sb.append(String.format("%s-%s:%s",
+                                sexBucket.getKey(), phoneBucket.getKey(), phoneBucket.getDocCount()));
+                        sb.append("\r\n");
+                    }
+                }
+                return sb.toString();
+            }
+        });
+        log.info("sexPhoneGroupResult => {}", sexPhoneGroup);
+    }
+
+    /**
+     * <p> group demo 3</p>
+     * select sex, phone, count(1), sum(age) from user group by sex, phone;
+     * @author youq  2019/4/15 11:06
+     */
+    public void groupAndSumBySexAndPhone() {
+        String sexGroupName = "sexGroup";
+        String phoneGroupName = "phoneGroup";
+        String ageSumName = "ageSum";
+        SumBuilder ageSumBuilder = AggregationBuilders.sum(ageSumName).field("age");
+        TermsBuilder sexBuilder = AggregationBuilders.terms(sexGroupName).field("sex");
+        TermsBuilder phoneBuilder = AggregationBuilders.terms(phoneGroupName).field("phone");
+        sexBuilder.subAggregation(phoneBuilder.subAggregation(ageSumBuilder));
+        //NativeSearchQueryBuilder
+        NativeSearchQueryBuilder builder = new NativeSearchQueryBuilder();
+        NativeSearchQuery searchQuery = builder.withIndices(ElasticsearchConstant.USER_INDEX)
+                .withTypes(ElasticsearchConstant.USER_TYPE)
+                .addAggregation(sexBuilder)
+                .build();
+        String sexPhoneGroup = elasticsearchTemplate.query(searchQuery, response -> {
+            StringTerms sexTerms = response.getAggregations().get(sexGroupName);
+            if (sexTerms == null) {
+                return null;
+            }
+            List<Terms.Bucket> buckets = sexTerms.getBuckets();
+            if (CollectionUtils.isEmpty(buckets)) {
+                return null;
+            } else {
+                StringBuilder sb = new StringBuilder();
+                for (Terms.Bucket sexBucket : buckets) {
+                    StringTerms phoneTerms = sexBucket.getAggregations().get(phoneGroupName);
+                    if (phoneTerms == null || CollectionUtils.isEmpty(phoneTerms.getBuckets())) {
+                        continue;
+                    }
+                    for (Terms.Bucket phoneBucket : phoneTerms.getBuckets()) {
+                        Sum ageSum = (Sum) phoneBucket.getAggregations().asMap().get(ageSumName);
+                        sb.append(String.format("%s-%s:%s, sum(age):%s",
+                                sexBucket.getKey(), phoneBucket.getKey(), phoneBucket.getDocCount(), ageSum.value()));
+                        sb.append("\r\n");
+                    }
+                }
+                return sb.toString();
+            }
+        });
+        log.info("sexPhoneGroupResult => {}", sexPhoneGroup);
+    }
+
+    /**
+     * <p> group demo 4</p>
+     * select sex, phone, count(1) from user group by sex, phone;
+     * @author youq  2019/4/15 11:06
+     */
+    public void groupAndTopHitsBySexAndPhone() {
+        String sexGroupName = "sexGroup";
+        String phoneGroupName = "phoneGroup";
+        String topHitsName = "top";
+        TermsBuilder sexBuilder = AggregationBuilders.terms(sexGroupName).field("sex");
+        TermsBuilder phoneBuilder = AggregationBuilders.terms(phoneGroupName).field("phone");
+        SortBuilder ageSort = SortBuilders.fieldSort("age").order(SortOrder.DESC).unmappedType("int");
+        phoneBuilder.subAggregation(AggregationBuilders.topHits(topHitsName).addSort(ageSort).setExplain(true).setSize(1).setFrom(0));
+        sexBuilder.subAggregation(phoneBuilder);
+        //NativeSearchQueryBuilder
+        NativeSearchQueryBuilder builder = new NativeSearchQueryBuilder();
+        NativeSearchQuery searchQuery = builder.withIndices(ElasticsearchConstant.USER_INDEX)
+                .withTypes(ElasticsearchConstant.USER_TYPE)
+                .addAggregation(sexBuilder)
+                .build();
+        String sexPhoneGroup = elasticsearchTemplate.query(searchQuery, response -> {
+            StringTerms sexTerms = response.getAggregations().get(sexGroupName);
+            if (sexTerms == null) {
+                return null;
+            }
+            List<Terms.Bucket> buckets = sexTerms.getBuckets();
+            if (CollectionUtils.isEmpty(buckets)) {
+                return null;
+            } else {
+                StringBuilder sb = new StringBuilder();
+                for (Terms.Bucket sexBucket : buckets) {
+                    StringTerms phoneTerms = sexBucket.getAggregations().get(phoneGroupName);
+                    if (phoneTerms == null || CollectionUtils.isEmpty(phoneTerms.getBuckets())) {
+                        continue;
+                    }
+                    for (Terms.Bucket phoneBucket : phoneTerms.getBuckets()) {
+                        sb.append(String.format("%s-%s:%s",
+                                sexBucket.getKey(), phoneBucket.getKey(), phoneBucket.getDocCount()));
+                        sb.append("\r\n");
+                        TopHits topHits = phoneBucket.getAggregations().get(topHitsName);
+                        for (SearchHit hit : topHits.getHits().getHits()) {
+                            sb.append("username:").append(hit.getSource().get("username")).append("\r\n");
+                            sb.append(hit.getId()).append("-->").append(hit.getSourceAsString());
+                        }
+                    }
+                }
+                return sb.toString();
+            }
+        });
+        log.info("sexPhoneGroupResult => {}", sexPhoneGroup);
     }
 
     /**

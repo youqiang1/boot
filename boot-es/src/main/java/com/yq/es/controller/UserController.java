@@ -32,12 +32,13 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/delete")
-    public ResultData<?> delete(String sex) {
-        userService.delete(SexEnum.valueOf(sex));
-        return ResultData.success(GlobalConstants.SUCCESS);
-    }
-
+    /**
+     * <p> 使用spring data elasticsearch提供的repository 分页查询数据</p>
+     * @param page 页码
+     * @param size 页大小
+     * @return com.yq.kernel.model.ResultData<?>
+     * @author youq  2019/4/15 11:01
+     */
     @GetMapping("/findAllByData")
     public ResultData<?> findAllByData(Integer page, Integer size) {
         List<User> users = userService.findAllByData(page, size);
@@ -45,6 +46,11 @@ public class UserController {
         return ResultData.success(ObjectUtils.toJson(users));
     }
 
+    /**
+     * <p> 通过elasticsearchTemplate查询所有数据</p>
+     * @return java.util.List<com.yq.es.entity.User>
+     * @author youq  2019/4/10 16:55
+     */
     @GetMapping("/findAllByTemplate")
     public ResultData<?> findAllByTemplate() {
         List<User> users = userService.findAllByTemplate();
@@ -52,6 +58,13 @@ public class UserController {
         return ResultData.success(users);
     }
 
+    /**
+     * <p> 通过elasticsearchTemplate分页查询数据，加查询条件</p>
+     * @param page 页码
+     * @param size 页大小
+     * @return org.springframework.data.domain.Page<com.yq.es.entity.User>
+     * @author youq  2019/4/10 17:37
+     */
     @GetMapping("/findPageByTemplate")
     public ResultData<?> findPageByTemplate(Integer page, Integer size) {
         //当前时间
@@ -84,6 +97,21 @@ public class UserController {
         } else {
             return ResultData.fail();
         }
+    }
+
+    /**
+     * <p> es sum</p>
+     * @return com.yq.kernel.model.ResultData<?>
+     * @author youq  2019/4/15 11:03
+     */
+    @GetMapping("/aggDemo")
+    public ResultData<?> aggDemo() {
+        userService.sumAge();
+        userService.groupSex();
+        userService.groupSexAndPhone();
+        userService.groupAndSumBySexAndPhone();
+        userService.groupAndTopHitsBySexAndPhone();
+        return ResultData.success();
     }
 
     /**
@@ -125,6 +153,12 @@ public class UserController {
             users.add(user);
         }
         return users;
+    }
+
+    @GetMapping("/delete")
+    public ResultData<?> delete(String sex) {
+        userService.delete(SexEnum.valueOf(sex));
+        return ResultData.success(GlobalConstants.SUCCESS);
     }
 
 }
