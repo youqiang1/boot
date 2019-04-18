@@ -1,4 +1,4 @@
-package com.yq.kernel.utils;
+package com.yq.kernel.utils.file;
 
 import lombok.extern.slf4j.Slf4j;
 
