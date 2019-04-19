@@ -53,16 +53,22 @@ springboot
     
 ####boot-es  
     名称：boot-es
-    描述：elasticsearch
+    描述：elasticsearch demo
     http端口：16074
     
 ####boot-task  
     名称：boot-task
-    描述：schedule
+    描述：schedule demo
     http端口：16075
     
 ####boot-mybatis  
     名称：boot-mybatis
-    描述：springboot+mybatis
+    描述：springboot+mybatis demo
     http端口：16076
+    
+####boot-netty-server  
+    名称：boot-netty-server
+    描述：springboot+netty server demo
+    http端口：16077
+    监听端口：16069
     

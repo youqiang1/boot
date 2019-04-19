@@ -1,0 +1,11 @@
+﻿﻿server:
+  port: 16077
+  context-path: /
+
+spring:
+  application:
+    name: boot-netty-server
+
+#netty配置
+netty:
+  port: 16069
