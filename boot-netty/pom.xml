@@ -44,7 +44,9 @@
 
     <modules>
         <module>boot-netty-server</module>
+        <module>boot-netty-client</module>
         <module>boot-netty-common</module>
+        <module>boot-netty-tcp</module>
     </modules>
 
     <dependencyManagement>

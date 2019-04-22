@@ -35,7 +35,7 @@ public class ServerChannelHandlerAdapter extends ChannelHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        if (msg instanceof String && NettyConstants.HEARTHEAD.equals(msg)) {
+        if (msg instanceof String && NettyConstants.HEARTBEAT.equals(msg)) {
             log.info("{} -> 心跳监测，【{}】通道活跃", this.getClass().getName(), ctx.channel().id());
             lossConnectCount = 0;
             return;

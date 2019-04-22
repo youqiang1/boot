@@ -24,7 +24,7 @@ public class NettyConstants {
     /**
      * 当在指定的时间段内没有执行任何读取操作时，将触发状态为IdleState.READER_IDLE，值为0时禁用
      */
-    public static final int CLIENT_READER_IDLE_TIME = 3;
+    public static final int CLIENT_READER_IDLE_TIME = 10;
 
     /**
      * 当在指定的时间段内没有执行写操作时，将触发状态为IdleState.WRITER_IDLE，值为0时禁用
@@ -54,6 +54,6 @@ public class NettyConstants {
     /**
      * 心跳包
      */
-    public static final String HEARTHEAD = "ping-pong-ping-pong";
+    public static final String HEARTBEAT = "ping-pong-ping-pong";
 
 }

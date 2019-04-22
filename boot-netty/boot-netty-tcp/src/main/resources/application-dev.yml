@@ -1,0 +1,17 @@
+﻿﻿server:
+  port: 16079
+  context-path: /
+
+spring:
+  application:
+    name: boot-netty-tcp
+
+#netty配置
+netty:
+  tcp:
+    #作为服务端开放给客户端的端口
+    port: 16068
+    #作为客户端请求的服务端地址和端口
+    server:
+      host: 127.0.0.1
+      port: 16068

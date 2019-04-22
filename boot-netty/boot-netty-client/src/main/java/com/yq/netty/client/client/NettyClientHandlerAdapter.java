@@ -50,7 +50,7 @@ public class NettyClientHandlerAdapter extends ChannelHandlerAdapter {
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
         log.info("{} -> [客户端心跳监测发送] 通道编号：{}", this.getClass().getName(), ctx.channel().id());
         if (evt instanceof IdleStateEvent) {
-            ctx.writeAndFlush(NettyConstants.HEARTHEAD);
+            ctx.writeAndFlush(NettyConstants.HEARTBEAT);
         } else {
             super.userEventTriggered(ctx, evt);
         }

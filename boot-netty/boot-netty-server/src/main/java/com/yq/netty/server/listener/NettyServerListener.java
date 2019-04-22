@@ -66,7 +66,8 @@ public class NettyServerListener {
                     ChannelPipeline pipeline = ch.pipeline();
                     //添加心跳支持
                     pipeline.addLast(
-                            new IdleStateHandler(NettyConstants.SERVER_READER_IDLE_TIME, NettyConstants.SERVER_WRITER_IDLE_TIME,
+                            new IdleStateHandler(NettyConstants.SERVER_READER_IDLE_TIME,
+                                    NettyConstants.SERVER_WRITER_IDLE_TIME,
                                     NettyConstants.SERVER_ALL_IDLE_TIME, TimeUnit.SECONDS)
                     );
                     // 基于定长的方式解决粘包/拆包问题

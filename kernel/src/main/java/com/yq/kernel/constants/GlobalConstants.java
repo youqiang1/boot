@@ -16,4 +16,9 @@ public class GlobalConstants {
      */
     public static final String FAIL = "fail";
 
+    /**
+     * ApplicationPidFileWriter filename
+     */
+    public static final String PID_FILE_NAME = "application.pid";
+
 }
