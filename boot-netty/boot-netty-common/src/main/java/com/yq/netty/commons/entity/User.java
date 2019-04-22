@@ -12,8 +12,8 @@ import java.nio.ByteBuffer;
  * @author youq  2019/4/19 19:51
  */
 @Data
-@NoArgsConstructor
 @Message
+@NoArgsConstructor
 public class User implements Serializable {
     /**
      * 序列化标识

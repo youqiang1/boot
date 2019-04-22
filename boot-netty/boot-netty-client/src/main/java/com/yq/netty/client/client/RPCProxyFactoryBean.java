@@ -1,5 +1,6 @@
 package com.yq.netty.client.client;
 
+import com.yq.kernel.utils.IdGen;
 import com.yq.netty.client.util.ChannelUtil;
 import com.yq.netty.client.util.WrapMethodUtils;
 import com.yq.netty.commons.entity.MethodInvokeMeta;
@@ -10,7 +11,6 @@ import org.springframework.beans.factory.config.AbstractFactoryBean;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
-import java.util.UUID;
 
 /**
  * <p> JDK动态代理类</p>
@@ -53,10 +53,11 @@ public class RPCProxyFactoryBean extends AbstractFactoryBean<Object> implements 
         log.info("{} -> [封装调用信息] ", this.getClass().getName());
         final MethodInvokeMeta methodInvokeMeta = WrapMethodUtils.readMethod(interfaceClass, method, args);
         log.info("{} -> [远程服务调用封装完毕] 调用接口 -> {}\n调用方法 -> {}\n参数列表 -> {} \n 参数类型 -> {}" +
-                        "\n 返回值类型 -> {}", this.getClass().getName(), methodInvokeMeta.getInterfaceClass(), methodInvokeMeta.getMethodName()
-                , methodInvokeMeta.getArgs(), methodInvokeMeta.getParameterTypes(), methodInvokeMeta.getReturnType());
+                        "\n 返回值类型 -> {}", this.getClass().getName(), methodInvokeMeta.getInterfaceClass(),
+                methodInvokeMeta.getMethodName() , methodInvokeMeta.getArgs(),
+                methodInvokeMeta.getParameterTypes(), methodInvokeMeta.getReturnType());
         // 构造一个时间戳
-        String uuid = System.currentTimeMillis() + UUID.randomUUID().toString();
+        String uuid = IdGen.DEFAULT.gen();
         // 真正开始使用netty进行通信的方法
         ChannelUtil.remoteCall(methodInvokeMeta, uuid);
         Object result;

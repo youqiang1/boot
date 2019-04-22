@@ -1,5 +1,6 @@
 package com.yq.netty.server.adapter;
 
+import com.yq.netty.commons.constants.NettyConstants;
 import com.yq.netty.commons.entity.MethodInvokeMeta;
 import com.yq.netty.server.dispatcher.RequestDispatcher;
 import io.netty.channel.ChannelHandler;
@@ -34,12 +35,10 @@ public class ServerChannelHandlerAdapter extends ChannelHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        if (msg instanceof String) {
-            if ("ping-pong-ping-pong".equals(msg)) {
-                log.info("{} -> 心跳监测，【{}】通道活跃", this.getClass().getName(), ctx.channel().id());
-                lossConnectCount = 0;
-                return;
-            }
+        if (msg instanceof String && NettyConstants.HEARTHEAD.equals(msg)) {
+            log.info("{} -> 心跳监测，【{}】通道活跃", this.getClass().getName(), ctx.channel().id());
+            lossConnectCount = 0;
+            return;
         }
         MethodInvokeMeta invokeMeta = (MethodInvokeMeta) msg;
         log.info("{} -> 客户短信消息 \n 方法名：{} \n 参数列表： {} \n返回值：{}",

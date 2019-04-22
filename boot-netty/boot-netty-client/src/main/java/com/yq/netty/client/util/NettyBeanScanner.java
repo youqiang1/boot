@@ -65,8 +65,6 @@ public class NettyBeanScanner implements BeanFactoryPostProcessor {
                     BeanDefinitionBuilder.genericBeanDefinition(RPCProxyFactoryBean.class);
             // 对应 RPCProxyFactoryBean 类的 interfaceClass 属性
             beanDefinitionBuilder.addPropertyValue("interfaceClass", clazz);
-            // 对应 RPCProxyFactoryBean 的nettyClient 属性  --  已删
-//            beanDefinitionBuilder.addPropertyReference("nettyClient", clientName);
             // 注册对bean的定义
             this.beanFactory.registerBeanDefinition(simpleName, beanDefinitionBuilder.getRawBeanDefinition());
         }

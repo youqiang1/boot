@@ -1,7 +1,5 @@
 package com.yq.netty.commons.util;
 
-import lombok.extern.slf4j.Slf4j;
-
 import java.io.*;
 
 /**
@@ -50,5 +48,5 @@ public class ObjectSerializerUtils {
         }
         return null;
     }
-    
+
 }

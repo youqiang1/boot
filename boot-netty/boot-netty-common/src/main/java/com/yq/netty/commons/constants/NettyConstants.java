@@ -51,4 +51,9 @@ public class NettyConstants {
      */
     public static final int MAX_RETRY_TIMES = 10;
 
+    /**
+     * 心跳包
+     */
+    public static final String HEARTHEAD = "ping-pong-ping-pong";
+
 }

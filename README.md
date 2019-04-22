@@ -72,3 +72,8 @@ springboot
     http端口：16077
     监听端口：16069
     
+####boot-netty-client  
+    名称：boot-netty-server
+    描述：springboot+netty client demo
+    http端口：16078
+    

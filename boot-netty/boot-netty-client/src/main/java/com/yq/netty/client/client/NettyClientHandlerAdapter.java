@@ -1,6 +1,7 @@
 package com.yq.netty.client.client;
 
 import com.yq.netty.client.util.ChannelUtil;
+import com.yq.netty.commons.constants.NettyConstants;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPromise;
@@ -49,7 +50,7 @@ public class NettyClientHandlerAdapter extends ChannelHandlerAdapter {
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
         log.info("{} -> [客户端心跳监测发送] 通道编号：{}", this.getClass().getName(), ctx.channel().id());
         if (evt instanceof IdleStateEvent) {
-            ctx.writeAndFlush("ping-pong-ping-pong");
+            ctx.writeAndFlush(NettyConstants.HEARTHEAD);
         } else {
             super.userEventTriggered(ctx, evt);
         }

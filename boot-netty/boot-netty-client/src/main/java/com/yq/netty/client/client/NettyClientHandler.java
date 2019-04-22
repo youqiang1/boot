@@ -33,7 +33,7 @@ public class NettyClientHandler extends ChannelInitializer<SocketChannel> {
                 new IdleStateHandler(NettyConstants.CLIENT_READER_IDLE_TIME, NettyConstants.CLIENT_WRITER_IDLE_TIME,
                         NettyConstants.CLIENT_ALL_IDLE_TIME, TimeUnit.SECONDS)
         );
-        pipeline.addLast(new NettyClient.NettyClientHandlerAdapter());
+        pipeline.addLast(new NettyClientHandlerAdapter());
     }
     
 }
