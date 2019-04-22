@@ -10,10 +10,10 @@ import org.springframework.boot.system.ApplicationPidFileWriter;
  * @author youq  2019/4/22 13:14
  */
 @SpringBootApplication
-public class NettyTcpApplication {
+public class BootNettyTcpApplication {
 
     public static void main(String[] args) {
-        SpringApplication application = new SpringApplication(NettyTcpApplication.class);
+        SpringApplication application = new SpringApplication(BootNettyTcpApplication.class);
         application.addListeners(new ApplicationPidFileWriter(GlobalConstants.PID_FILE_NAME));
         application.run(args);
     }
