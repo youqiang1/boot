@@ -1,10 +1,8 @@
 package com.yq.netty.server.dispatcher;
 
-import com.google.common.util.concurrent.ThreadFactoryBuilder;
-import com.yq.netty.commons.exception.ErrorParamsException;
-import com.yq.netty.server.constants.NettyConstants;
 import com.yq.netty.commons.entity.MethodInvokeMeta;
 import com.yq.netty.commons.entity.NullWritable;
+import com.yq.netty.commons.exception.ErrorParamsException;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
@@ -14,10 +12,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.concurrent.*;
 
 /**
  * <p> 请求分配器</p>
@@ -27,19 +23,7 @@ import java.util.concurrent.*;
 @Component
 public class RequestDispatcher implements ApplicationContextAware {
 
-    private ExecutorService pool;
-
     private ApplicationContext applicationContext;
-
-    @PostConstruct
-    public void init() {
-        ThreadFactory threadFactory = new ThreadFactoryBuilder()
-                .setNameFormat("request-dispatcher-%d")
-                .build();
-        pool = new ThreadPoolExecutor(NettyConstants.getCorePoolSize(), NettyConstants.getMaxThreads(), 0L,
-                TimeUnit.MICROSECONDS, new LinkedBlockingQueue<>(NettyConstants.getBlockQueueSize()),
-                threadFactory, new ThreadPoolExecutor.AbortPolicy());
-    }
 
     /**
      * <p> 发送</p>

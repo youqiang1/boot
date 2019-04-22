@@ -28,7 +28,7 @@ public class ServerChannelHandlerAdapter extends ChannelHandlerAdapter {
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         log.error("{} -> 连接异常，【{}】通道异常，异常原因：{}",
-                this.getClass().getName(), ctx.channel().id(), cause.getMessage());
+                this.getClass().getName(), ctx.channel().id(), cause.getMessage(), cause);
         ctx.close();
     }
 

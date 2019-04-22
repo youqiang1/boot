@@ -1,0 +1,13 @@
+﻿﻿server:
+  port: 16078
+  context-path: /
+
+spring:
+  application:
+    name: boot-netty-client
+
+netty:
+  port: 16069
+  basePackage: com.yq.netty.rpc;
+  clientName: nettyClient
+  url: 127.0.0.1
