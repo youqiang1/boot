@@ -31,6 +31,11 @@ springboot
     描述：feign response demo, eureka client
     http端口：16005
     
+####boot-zuul  
+    名称：BOOT-ZUUL
+    描述：zuul demo, eureka client
+    http端口：16006
+    
 ####boot-jpa  
     名称：boot-jpa
     描述：spring data jpa demo

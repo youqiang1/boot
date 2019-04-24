@@ -1,0 +1,46 @@
+﻿﻿server:
+  port: 16006
+  context-path: /
+
+eureka:
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ipAddress}:${server.port}
+    hostname: ${spring.cloud.client.ipAddress}
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:16000/eureka/
+
+spring:
+  application:
+    name: BOOT-ZUUL
+
+ribbon:
+  ReadTimeout: 60000
+  ConnectTimeout: 60000
+
+zuul:
+  routes:
+  #标识你服务的名字，这里可以自己定义，一般方便和规范来讲还是跟自己服务的名字一样
+    redisson:
+    #服务映射的路径，通过这路径就可以从外部访问你的服务了，目的是为了不爆露你机器的IP，面向服务的路由了，给你选一个可用的出来，
+    #这里zuul是自动依赖hystrix，ribbon的，不是面向单机
+      path: /redisson/**
+      #这里一定要是你Eureka注册中心的服务的名称，是所以这里配置serviceId因为跟eureka结合了
+      serviceId: BOOT-REDISSON
+    rebbitmq:
+      path: /rabbitmq/**
+      serviceId: BOOT-RABBITMQ
+    kafka:
+      path: /kafka/**
+      serviceId: BOOT-STREAM-KAFKA
+    feignRequest:
+      path: /feignRequest/**
+      serviceId: BOOT-FEIGN-REQUEST
+    feignResponse:
+      path: /feignResponse/**
+      serviceId: BOOT-FEIGN-RESPONSE
+
+security:
+  basic:
+    enabled: false
