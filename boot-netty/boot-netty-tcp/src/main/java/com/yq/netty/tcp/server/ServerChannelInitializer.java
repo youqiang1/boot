@@ -31,7 +31,7 @@ public class ServerChannelInitializer extends ChannelInitializer<SocketChannel> 
                 new IdleStateHandler(NettyConstants.SERVER_READER_IDLE_TIME,
                         NettyConstants.SERVER_WRITER_IDLE_TIME,
                         NettyConstants.SERVER_ALL_IDLE_TIME, TimeUnit.SECONDS));
-        //字符串编解码器
+        //字符串编解码器，可自定义实体及其编解码器，例：MessageToByteEncoder ByteToMessageDecoder的实现类
         pipeline.addLast(new StringDecoder(), new StringEncoder());
         //自定义handler
         pipeline.addLast("serverChannelHandler", serverChannelHandler);
