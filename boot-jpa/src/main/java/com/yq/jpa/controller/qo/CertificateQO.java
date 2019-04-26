@@ -1,4 +1,4 @@
-package com.yq.jpa.console.qo;
+package com.yq.jpa.controller.qo;
 
 import com.yq.jpa.common.SearchType;
 import lombok.AllArgsConstructor;

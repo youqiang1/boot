@@ -1,8 +1,8 @@
 package com.yq.jpa.service;
 
 import com.yq.jpa.common.SearchType;
-import com.yq.jpa.console.qo.CertificateQO;
-import com.yq.jpa.console.vo.CertificateVO;
+import com.yq.jpa.controller.qo.CertificateQO;
+import com.yq.jpa.controller.vo.CertificateVO;
 import com.yq.jpa.db.FnMember;
 import com.yq.jpa.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;

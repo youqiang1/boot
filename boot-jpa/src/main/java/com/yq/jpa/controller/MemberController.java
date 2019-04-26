@@ -1,8 +1,8 @@
-package com.yq.jpa.console;
+package com.yq.jpa.controller;
 
 import com.yq.jpa.common.SearchType;
-import com.yq.jpa.console.qo.CertificateQO;
-import com.yq.jpa.console.vo.CertificateVO;
+import com.yq.jpa.controller.qo.CertificateQO;
+import com.yq.jpa.controller.vo.CertificateVO;
 import com.yq.jpa.service.MemberService;
 import com.yq.kernel.model.ResultData;
 import lombok.extern.slf4j.Slf4j;

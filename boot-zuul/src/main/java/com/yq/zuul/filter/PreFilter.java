@@ -3,7 +3,6 @@ package com.yq.zuul.filter;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Slf4j
 @Component
-public class TokenFilter extends ZuulFilter {
+public class PreFilter extends ZuulFilter {
 
     /**
      * <p>
@@ -66,13 +65,13 @@ public class TokenFilter extends ZuulFilter {
         String remoteHost = request.getRemoteHost();
         log.info("requestURL:{}, remoteHost:{}", requestURL, remoteHost);
         //是否携带指定的请求参数，也可以在请求头中指定
-        String token = request.getParameter("token");
-        if (StringUtils.isEmpty(token)) {
-            context.setSendZuulResponse(false);
-            context.setResponseStatusCode(401);
-            context.setResponseBody("unAuthorized");
-            return null;
-        }
+        // String token = request.getParameter("token");
+        // if (StringUtils.isEmpty(token)) {
+        //     context.setSendZuulResponse(false);
+        //     context.setResponseStatusCode(401);
+        //     context.setResponseBody("unAuthorized");
+        //     return null;
+        // }
         return null;
     }
 }

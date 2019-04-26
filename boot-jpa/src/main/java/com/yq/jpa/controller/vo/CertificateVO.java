@@ -1,4 +1,4 @@
-package com.yq.jpa.console.vo;
+package com.yq.jpa.controller.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

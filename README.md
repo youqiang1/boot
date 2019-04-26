@@ -82,7 +82,7 @@ springboot
     描述：springboot+netty client demo
     http端口：16078
     
-####boot-netty-tco  
+####boot-netty-tcp  
     名称：boot-netty-tcp
     描述：simple springboot+netty client+server demo
     http端口：16079
