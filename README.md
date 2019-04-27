@@ -92,4 +92,15 @@ springboot
     名称：boot-swagger
     描述：spring boot swagger demo
     http端口：16080
+     
+####boot-dubbo-provider
+    名称：boot-dubbo-provider
+    描述：spring boot dubbo provider demo
+    http端口：16081
+    dubbo端口：16082
+    
+####boot-dubbo-consumer
+    名称：boot-dubbo-consumer
+    描述：spring boot dubbo consumer demo
+    http端口：16083
     

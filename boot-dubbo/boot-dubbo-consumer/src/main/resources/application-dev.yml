@@ -1,0 +1,11 @@
+﻿﻿server:
+  port: 16083
+  context-path: /
+spring:
+  application:
+    name: boot-dubbo-consumer
+  dubbo:
+    application.name: consumer
+    registry.address: zookeeper://127.0.0.1:2181
+    scan: com.yq.dubbo.service
+

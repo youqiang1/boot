@@ -41,3 +41,11 @@ boot-zuul/src/test/
 boot-zuul/target/
 redisop/target/
 register/target/
+boot-swagger/src/test/
+boot-swagger/target/
+boot-dubbo/src/
+boot-dubbo/target/
+boot-dubbo/boot-dubbo-provider/src/test/
+boot-dubbo/boot-dubbo-provider/target/
+boot-dubbo/boot-dubbo-consumer/src/test/
+boot-dubbo/boot-dubbo-consumer/target/

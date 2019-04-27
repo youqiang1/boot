@@ -1,0 +1,14 @@
+﻿﻿server:
+  port: 16081
+  context-path: /
+spring:
+  application:
+    name: boot-dubbo-provider
+  dubbo:
+    application.name: provider
+    registry.address: zookeeper://127.0.0.1:2181
+    protocol:
+      name: dubbo
+      port: 16082
+    scan: com.yq.dubbo.service
+
