@@ -49,3 +49,4 @@ boot-dubbo/boot-dubbo-provider/src/test/
 boot-dubbo/boot-dubbo-provider/target/
 boot-dubbo/boot-dubbo-consumer/src/test/
 boot-dubbo/boot-dubbo-consumer/target/
+boot-mybatis-multi/target/

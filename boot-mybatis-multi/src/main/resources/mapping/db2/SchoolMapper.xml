@@ -1,0 +1,15 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yq.mybatis.multi.mapper.db2.SchoolMapper">
+
+    <insert id="save" parameterType="School">
+        INSERT INTO `school`( `name`, `province`)
+         VALUES ( #{name}, #{province});
+    </insert>
+
+    <select id="findOne" parameterType="java.lang.Integer" resultType="School">
+        select * from school where id = #{id}
+    </select>
+
+</mapper>

@@ -1,0 +1,15 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yq.mybatis.multi.mapper.db1.StudentMapper">
+
+    <insert id="save" parameterType="Student">
+        INSERT INTO `student`( `name`, `student_no`)
+         VALUES ( #{name}, #{studentNo});
+    </insert>
+
+    <select id="findOne" parameterType="java.lang.Integer" resultType="Student">
+        select * from student where id = #{id}
+    </select>
+
+</mapper>

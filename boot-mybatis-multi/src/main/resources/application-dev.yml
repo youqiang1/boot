@@ -1,0 +1,51 @@
+﻿﻿server:
+  port: 16084
+  context-path: /
+
+spring:
+  application:
+    name: boot-mybatis-multi
+  datasource:
+  #数据源1
+    url: jdbc:mysql://localhost:3306/simple_dev?useUnicode=true&characterEncoding=utf8&useSSL=false
+    username: root
+    password: root
+    driverClassName: com.mysql.jdbc.Driver
+    tomcat:
+      default-auto-commit: false
+      default-read-only: true
+      max-idle: 10
+      max-wait: 10000
+      min-idle: 5
+      initial-size: 5
+      validation-query: SELECT 1
+      test-while-idle: true
+      test-on-borrow: false
+      time-between-eviction-runs-millis: 18800
+  #数据源2
+  datasource2:
+    url: jdbc:mysql://localhost:3306/simple_dev2?useUnicode=true&characterEncoding=utf8&useSSL=false
+    username: root
+    password: root
+    driverClassName: com.mysql.jdbc.Driver
+    tomcat:
+      default-auto-commit: false
+      default-read-only: true
+      max-idle: 10
+      max-wait: 10000
+      min-idle: 5
+      initial-size: 5
+      validation-query: SELECT 1
+      test-while-idle: true
+      test-on-borrow: false
+      time-between-eviction-runs-millis: 18800
+
+#mybatis配置
+mybatis:
+  type-aliases-package: com.yq.mybatis.multi.entity
+  mapper-locations:
+    db1: classpath:mapping/db1/*Mapper.xml
+    db2: classpath:mapping/db2/*Mapper.xml
+  configuration:
+    map-underscore-to-camel-case: true
+
