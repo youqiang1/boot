@@ -1,0 +1,6 @@
+﻿﻿server:
+  port: 16080
+  context-path: /
+spring:
+  application:
+    name: boot-swagger

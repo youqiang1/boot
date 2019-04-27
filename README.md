@@ -88,3 +88,8 @@ springboot
     http端口：16079
     监听端口：16068
     
+####boot-swagger
+    名称：boot-swagger
+    描述：spring boot swagger demo
+    http端口：16080
+    
