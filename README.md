@@ -104,3 +104,13 @@ springboot
     描述：spring boot dubbo consumer demo
     http端口：16083
     
+####boot-mybatis-multi
+    名称：boot-mybatis-multi
+    描述：springboot+mybatis 多数据源 demo
+    http端口：16084
+    
+####boot-web
+    名称：boot-web
+    描述：spring boot web(thymeleaf) demo，数据库使用嵌入式的H2数据库
+    http端口：16085
+    

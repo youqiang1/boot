@@ -50,3 +50,5 @@ boot-dubbo/boot-dubbo-provider/target/
 boot-dubbo/boot-dubbo-consumer/src/test/
 boot-dubbo/boot-dubbo-consumer/target/
 boot-mybatis-multi/target/
+boot-web/src/test/
+boot-web/target/

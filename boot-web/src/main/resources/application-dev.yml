@@ -1,0 +1,6 @@
+﻿﻿server:
+  port: 16085
+  context-path: /
+spring:
+  application:
+    name: boot-web
