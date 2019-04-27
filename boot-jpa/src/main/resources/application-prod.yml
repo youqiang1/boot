@@ -16,5 +16,6 @@ spring:
     hibernate:
       ddl-auto: update
       naming:
+      #注意，添加此配置后，数据库根据实体、字段原样建表，如不想写@cloumn注解，建议注释掉该配置
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     show-sql: true
