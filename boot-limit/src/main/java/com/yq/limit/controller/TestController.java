@@ -25,13 +25,19 @@ public class TestController {
     @Autowired
     private RedisTemplate redisTemplate;
 
-    @RateLimit(key = "limiter", time = 60, count = 10)
+    /**
+     * <p> 同一用户10秒内只能请求10次</p>
+     * lua脚本有问题，现在lua脚本的情况是：数值在redis中存储过期时间为2秒，超过两秒计数就重新开始了
+     * @return com.yq.kernel.model.ResultData<?>
+     * @author youq  2019/4/28 16:28
+     */
+    @RateLimit(key = "limiter", time = 10, count = 10)
     @GetMapping("/limiter")
     public ResultData<?> limiter() {
         RedisAtomicInteger entityIdCounter =
                 new RedisAtomicInteger("entityIdCounter", redisTemplate.getConnectionFactory());
         String date = DateUtils.localDateTimeDefaultFormat(LocalDateTime.now());
-        return ResultData.success(date + "累计访问次数：" + entityIdCounter.getAndIncrement());
+        return ResultData.success("时间【" + date + "】累计访问次数：" + entityIdCounter.getAndIncrement());
     }
 
 }

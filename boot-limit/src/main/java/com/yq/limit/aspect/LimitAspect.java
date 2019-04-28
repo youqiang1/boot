@@ -47,7 +47,7 @@ public class LimitAspect {
             String sb = ipAddress + "-" + targetClass.getName() + "-" + method.getName() + "-" + rateLimit.key();
             List<String> keys = Collections.singletonList(sb);
             Number number = limitRedisTemplate.execute(redisLuaScript, keys, rateLimit.count(), rateLimit.time());
-            if (number != null && number.intValue() != 0 && number.intValue() < rateLimit.count()) {
+            if (number.intValue() != 0 && number.intValue() < rateLimit.count()) {
                 log.info("限流时间段内访问第【{}】次", number.toString());
                 return joinPoint.proceed();
             }
