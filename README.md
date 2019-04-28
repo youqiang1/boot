@@ -114,3 +114,8 @@ springboot
     描述：spring boot web(thymeleaf) demo，数据库使用嵌入式的H2数据库
     http端口：16085
     
+####boot-limit
+    名称：boot-limit
+    描述：Spring Boot + 分布式应用限流 demo
+    http端口：16086
+    

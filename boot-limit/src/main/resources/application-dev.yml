@@ -1,0 +1,11 @@
+﻿﻿server:
+  port: 16086
+  context-path: /
+spring:
+  application:
+    name: boot-limit
+
+  redis:
+    host: 192.168.10.114
+    port: 6379
+    timeout: 10s
