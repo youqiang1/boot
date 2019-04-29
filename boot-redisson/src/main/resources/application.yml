@@ -2,12 +2,12 @@ spring:
   profiles:
     active: dev
   thymeleaf:
-      enabled: true
-      mode: HTML5
-      encoding: UTF-8
-      content-type: text/html
-      prefix: classpath:/templates/ # 模板存放在资源目录的 templates/ 文件下
-      suffix: .html # 模板后缀
-      check-template-location: true
-      check-template: false
-      cache: false # 调试时关闭缓存
+    enabled: true
+    mode: HTML5
+    encoding: UTF-8
+    content-type: text/html
+    prefix: classpath:/templates/ # 模板存放在资源目录的 templates/ 文件下
+    suffix: .html # 模板后缀
+    check-template-location: true
+    check-template: false
+    cache: false # 调试时关闭缓存

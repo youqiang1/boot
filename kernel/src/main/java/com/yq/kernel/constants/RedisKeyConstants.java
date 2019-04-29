@@ -11,4 +11,9 @@ public class RedisKeyConstants {
      */
     public static final String USER_INFO = "user_info";
 
+    /**
+     * 账户余额信息
+     */
+    public static final String ACCOUNT_BALANCE = "account_balance";
+
 }

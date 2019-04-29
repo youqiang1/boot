@@ -15,7 +15,7 @@ spring:
   application:
     name: BOOT-REDISSON
   datasource:
-    url: jdbc:mysql://localhost:3306/simple_dev?useUnicode=true&characterEncoding=utf8
+    url: jdbc:mysql://localhost:3306/simple_dev?useUnicode=true&characterEncoding=utf8&useSSL=false
     username: root
     password: root
     driverClassName: com.mysql.jdbc.Driver
