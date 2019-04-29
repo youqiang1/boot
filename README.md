@@ -119,3 +119,8 @@ springboot
     描述：Spring Boot + 分布式应用限流 demo
     http端口：16086
     
+####boot-sharding-mybatis
+    名称：boot-sharding-mybatis
+    描述：Spring Boot + sharding + mybatis
+    http端口：16087
+    

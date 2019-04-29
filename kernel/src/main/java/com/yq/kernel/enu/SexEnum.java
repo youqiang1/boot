@@ -6,11 +6,11 @@ package com.yq.kernel.enu;
  */
 public enum SexEnum {
     /**
-     * 男
-     */
-    MALE,
-    /**
      * 女
      */
     FEMALE,
+    /**
+     * 男
+     */
+    MALE,
 }
