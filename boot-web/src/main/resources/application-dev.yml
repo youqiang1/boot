@@ -4,3 +4,6 @@
 spring:
   application:
     name: boot-web
+  test-starter:
+    name: youq
+    age: 28
