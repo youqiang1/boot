@@ -1,4 +1,4 @@
-﻿﻿server:
+﻿server:
   port: 16074
   context-path: /
 

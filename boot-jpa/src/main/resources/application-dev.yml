@@ -1,4 +1,4 @@
-﻿﻿server:
+﻿server:
   port: 16070
   context-path: /
 spring:
