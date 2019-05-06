@@ -124,3 +124,8 @@ springboot
     描述：Spring Boot + sharding + mybatis
     http端口：16087
     
+####boot-es-rest  
+    名称：boot-es-rest
+    描述：springboot + es(Rest Client) demo
+    http端口：16088
+    
