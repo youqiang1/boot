@@ -128,4 +128,9 @@ springboot
     名称：boot-es-rest
     描述：springboot + es(Rest Client) demo
     http端口：16088
-    
+ 
+####boot-sharding-jpa
+    名称：boot-sharding-jpa
+    描述：Spring Boot + sharding + jpa
+    http端口：16089
+       

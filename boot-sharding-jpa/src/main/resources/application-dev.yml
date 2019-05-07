@@ -1,21 +1,23 @@
 ﻿﻿server:
-  port: 16087
+  port: 16089
   context-path: /
 spring:
   application:
-    name: boot-sharding-mybatis
-#mybatis配置
-mybatis:
-  mapper-locations: classpath:mapping/*Mapper.xml
-  type-aliases-package: com.yq.sharding.mybatis.entity
+    name: boot-sharding-jpa
+  jpa:
+    hibernate.ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
 sharding:
   jdbc:
     datasource:
-      names: ds0
-      ds0:
+      names: test
+      test:
         type: com.alibaba.druid.pool.DruidDataSource
         driver-class-name: com.mysql.jdbc.Driver
-        url: jdbc:mysql://localhost:3306/simple_dev?useUnicode=true&characterEncoding=utf8&useSSL=false
+        url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf8&useSSL=false
         username: root
         password: root
     config:
@@ -27,11 +29,11 @@ sharding:
             #主键
             key-generator-column-name: id
             #数据节点,均匀分布
-            actual-data-nodes: ds0.t_user${0..1}
+            actual-data-nodes: test.t_user${0..1}
             #分表策略
             table-strategy:
               #行表达式
               inline:
-                sharding-column: sex
+                sharding-column: id
                 #按模运算分配
-                algorithm-expression: ds0.t_user${sex % 2}
+                algorithm-expression: test.t_user${id % 2}
