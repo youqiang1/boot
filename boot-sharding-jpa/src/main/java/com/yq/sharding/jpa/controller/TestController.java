@@ -44,7 +44,7 @@ public class TestController {
             user.setLastModified(date);
             user.setName("jpa_youq" + i);
             user.setCityId(i % 2 == 0 ? 1 : 2);
-            user.setSex(i % 2 == 0 ? SexEnum.MALE : SexEnum.FEMALE);
+            user.setSex(i % 2 == 0 ? SexEnum.FEMALE : SexEnum.MALE);
             user.setPhone("11111" + i);
             user.setEmail("136@163.com");
             user.setPassword("123456");

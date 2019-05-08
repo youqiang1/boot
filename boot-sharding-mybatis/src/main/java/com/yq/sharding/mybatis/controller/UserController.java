@@ -36,7 +36,7 @@ public class UserController {
             user.setLastModified(date);
             user.setName("youq" + i);
             user.setCityId(i % 2 == 0 ? 1 : 2);
-            user.setSex(i % 2 == 0 ? SexEnum.MALE.ordinal() : SexEnum.FEMALE.ordinal());
+            user.setSex(i % 2 == 0 ? SexEnum.FEMALE.ordinal() : SexEnum.MALE.ordinal());
             user.setPhone("11111" + i);
             user.setEmail("136@163.com");
             user.setPassword("123456");
