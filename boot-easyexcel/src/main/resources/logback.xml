@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>[%d %-5level %t %logger{1}] %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- System log -->
+    <appender name="file.log.sys"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <append>true</append>
+        <file>./logs/ing/sys.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>./logs/sys/%d{yyyyMMdd}.sys.log
+            </fileNamePattern>
+        </rollingPolicy>
+        <encoder>
+            <pattern>[%d %-5level %t %logger{1}] %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <root>
+        <level value="INFO"/>
+        <appender-ref ref="file.log.sys"/>
+        <appender-ref ref="stdout"/>
+    </root>
+
+</configuration>

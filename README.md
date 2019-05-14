@@ -134,3 +134,8 @@ springboot
     描述：Spring Boot + sharding + jpa
     http端口：16089
        
+####boot-easyexcel
+    名称：boot-easyexcel
+    描述：Spring Boot + easyexcel
+    http端口：16090
+       
