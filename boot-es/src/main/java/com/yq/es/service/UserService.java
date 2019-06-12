@@ -193,7 +193,7 @@ public class UserService {
      */
     public void groupSex() {
         String sexGroupName = "sexGroup";
-        TermsBuilder sexBuilder = AggregationBuilders.terms(sexGroupName).field("sex");
+        TermsBuilder sexBuilder = AggregationBuilders.terms(sexGroupName).field("sex").size(ElasticsearchConstant.QUERY_MAX_LIMIT);
         //NativeSearchQueryBuilder
         NativeSearchQueryBuilder builder = new NativeSearchQueryBuilder();
         NativeSearchQuery searchQuery = builder.withIndices(ElasticsearchConstant.USER_INDEX)
@@ -230,7 +230,7 @@ public class UserService {
         String phoneGroupName = "phoneGroup";
         TermsBuilder sexBuilder = AggregationBuilders.terms(sexGroupName).field("sex");
         TermsBuilder phoneBuilder = AggregationBuilders.terms(phoneGroupName).field("phone");
-        sexBuilder.subAggregation(phoneBuilder);
+        sexBuilder.subAggregation(phoneBuilder).size(ElasticsearchConstant.QUERY_MAX_LIMIT);
         //NativeSearchQueryBuilder
         NativeSearchQueryBuilder builder = new NativeSearchQueryBuilder();
         NativeSearchQuery searchQuery = builder.withIndices(ElasticsearchConstant.USER_INDEX)
@@ -276,7 +276,7 @@ public class UserService {
         SumBuilder ageSumBuilder = AggregationBuilders.sum(ageSumName).field("age");
         TermsBuilder sexBuilder = AggregationBuilders.terms(sexGroupName).field("sex");
         TermsBuilder phoneBuilder = AggregationBuilders.terms(phoneGroupName).field("phone");
-        sexBuilder.subAggregation(phoneBuilder.subAggregation(ageSumBuilder));
+        sexBuilder.subAggregation(phoneBuilder.subAggregation(ageSumBuilder)).size(ElasticsearchConstant.QUERY_MAX_LIMIT);
         //NativeSearchQueryBuilder
         NativeSearchQueryBuilder builder = new NativeSearchQueryBuilder();
         NativeSearchQuery searchQuery = builder.withIndices(ElasticsearchConstant.USER_INDEX)
@@ -323,7 +323,7 @@ public class UserService {
         TermsBuilder sexBuilder = AggregationBuilders.terms(sexGroupName).field("sex");
         TermsBuilder phoneBuilder = AggregationBuilders.terms(phoneGroupName).field("phone");
         SortBuilder ageSort = SortBuilders.fieldSort("age").order(SortOrder.DESC).unmappedType("int");
-        phoneBuilder.subAggregation(AggregationBuilders.topHits(topHitsName).addSort(ageSort).setExplain(true).setSize(1).setFrom(0));
+        phoneBuilder.subAggregation(AggregationBuilders.topHits(topHitsName).addSort(ageSort).setExplain(true).setSize(1).setFrom(0)).size(ElasticsearchConstant.QUERY_MAX_LIMIT);
         sexBuilder.subAggregation(phoneBuilder);
         //NativeSearchQueryBuilder
         NativeSearchQueryBuilder builder = new NativeSearchQueryBuilder();

@@ -21,8 +21,16 @@ public class TakeArgsThread implements Runnable {
         this.taskService = taskService;
     }
 
+    public void exception() {
+        String result = taskService.say2(hello);
+        log.info("时间：{}，resultStr: {}", LocalDateTime.now(), result);
+    }
+
     @Override
     public void run() {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException ignored) {}
         String result = taskService.say(hello);
         log.info("时间：{}，resultStr: {}", LocalDateTime.now(), result);
     }

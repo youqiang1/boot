@@ -16,4 +16,9 @@ public class TaskService {
         return hello;
     }
 
+    public String say2(String hello) {
+        hello = String.format("拒绝策略处理：%s", hello);
+        return hello;
+    }
+
 }

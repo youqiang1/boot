@@ -41,7 +41,19 @@ public class TestController {
             for (Object object : objects) {
                 importInfos.add((ImportInfo) object);
             }
-            return ResultData.success(importInfos);
+            return ResultData.success(importInfos.size());
+        }
+        return ResultData.success();
+    }
+
+    /**
+     * 读取 Excel（允许多个 sheet）
+     */
+    @PostMapping("/readExcelWithSheets2")
+    public ResultData<?> readExcelWithSheets2(MultipartFile excel) {
+        List<Object> objects = ExcelUtils.readExcel(excel, null);
+        if (!CollectionUtils.isEmpty(objects)) {
+            return ResultData.success(objects.size());
         }
         return ResultData.success();
     }
