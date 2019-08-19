@@ -1,0 +1,7 @@
+server:
+  port: 16091
+  context-path: /
+
+spring:
+  application:
+    name: boot-chain
