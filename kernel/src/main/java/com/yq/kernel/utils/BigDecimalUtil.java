@@ -51,6 +51,19 @@ public class BigDecimalUtil {
     }
 
     /**
+     * <p> 减</p>
+     * @param value1 参数1
+     * @param value2 参数2
+     * @return BigDecimal
+     * @author youq  2018/7/13 17:08
+     */
+    public static BigDecimal subtract(String value1, String value2) {
+        BigDecimal b1 = new BigDecimal(value1);
+        BigDecimal b2 = new BigDecimal(value2);
+        return b1.subtract(b2);
+    }
+
+    /**
      * <p> 乘</p>
      * @param value1 参数1
      * @param value2 参数2

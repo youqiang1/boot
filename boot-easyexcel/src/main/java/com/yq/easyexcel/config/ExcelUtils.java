@@ -90,6 +90,24 @@ public class ExcelUtils {
     }
 
     /**
+     * <p> 导出excel，一个sheet，带表头</p>
+     * @param response  HttpServletResponse
+     * @param list      数据 list，每个元素为一个 BaseRowModel
+     * @param filename  导出的文件名
+     * @param sheetName 导入文件的 sheet 名
+     * @param rowModel  映射实体类，Excel 模型
+     * @author youq  2019/5/14 14:12
+     */
+    public static void writeExcel2(HttpServletResponse response, List<? extends BaseRowModel> list,
+                                  String filename, String sheetName, BaseRowModel rowModel, int sheetNo) {
+        ExcelWriter writer = new ExcelWriter(getOutputStream(filename, response), ExcelTypeEnum.XLSX);
+        Sheet sheet = new Sheet(sheetNo, 0, rowModel.getClass());
+        sheet.setSheetName(sheetName);
+        writer.write(list, sheet);
+        writer.finish();
+    }
+
+    /**
      * <p> 导出excel，多个sheet，带表头</p>
      * @param response  HttpServletResponse
      * @param list      数据 list，每个元素为一个 BaseRowModel

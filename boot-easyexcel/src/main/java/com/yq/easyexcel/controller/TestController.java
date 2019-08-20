@@ -53,7 +53,11 @@ public class TestController {
     public ResultData<?> readExcelWithSheets2(MultipartFile excel) {
         List<Object> objects = ExcelUtils.readExcel(excel, null);
         if (!CollectionUtils.isEmpty(objects)) {
-            return ResultData.success(objects.size());
+            List<List<String>> returns = Lists.newArrayListWithCapacity(objects.size());
+            for (Object object : objects) {
+                returns.add((List<String>) object);
+            }
+            return ResultData.success(returns.size());
         }
         return ResultData.success();
     }

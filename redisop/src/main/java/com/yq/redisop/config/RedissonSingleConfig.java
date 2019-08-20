@@ -4,9 +4,9 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import lombok.Data;
 import org.redisson.client.codec.Codec;
 import org.redisson.config.Config;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
@@ -17,8 +17,8 @@ import org.springframework.util.StringUtils;
  */
 @Data
 @Configuration
-@Conditional(RedissonSingleCondition.class)
-@ConfigurationProperties(prefix = "spring.redisson")
+@ConfigurationProperties(prefix = "spring.redisson.single")
+@ConditionalOnProperty(name = "spring.redisson.type", havingValue = "single", matchIfMissing = true)
 public class RedissonSingleConfig {
     private String address;
     private int connectionMinimumIdleSize = 10;

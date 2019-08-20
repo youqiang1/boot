@@ -34,23 +34,24 @@ spring:
 
 #  redisson 的单机版配置
   redisson:
-    type: SINGLE
-    address: "redis://192.168.10.114:6379"
-    connectionMinimumIdleSize: 10
-    idleConnectionTimeout: 10000
-    pingTimeout: 1000
-    connectTimeout: 10000
-    timeout: 3000
-    retryAttempts: 3
-    retryInterval: 1500
-    password:
-    subscriptionsPerConnection: 5
-    clientName: null
-    subscriptionConnectionMinimumIdleSize: 1
-    subscriptionConnectionPoolSize: 50
-    connectionPoolSize: 64
-    database: 0
-    dnsMonitoring: false
-    dnsMonitoringInterval: 5000
-    codec: org.redisson.codec.JsonJacksonCodec
+    type: single
+    single:
+      address: "redis://192.168.10.114:6379"
+      connectionMinimumIdleSize: 10
+      idleConnectionTimeout: 10000
+      pingTimeout: 1000
+      connectTimeout: 10000
+      timeout: 3000
+      retryAttempts: 3
+      retryInterval: 1500
+      password:
+      subscriptionsPerConnection: 5
+      clientName: null
+      subscriptionConnectionMinimumIdleSize: 1
+      subscriptionConnectionPoolSize: 50
+      connectionPoolSize: 64
+      database: 0
+      dnsMonitoring: false
+      dnsMonitoringInterval: 5000
+      codec: org.redisson.codec.JsonJacksonCodec
 

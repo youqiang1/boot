@@ -3,9 +3,9 @@ package com.yq.redisop.config;
 import io.netty.channel.nio.NioEventLoopGroup;
 import lombok.Data;
 import org.redisson.config.Config;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.ArrayList;
@@ -17,15 +17,15 @@ import java.util.List;
  */
 @Data
 @Configuration
-@Conditional(RedissonSentinelCondition.class)
-@ConfigurationProperties(prefix = "spring.redisson")
+@ConfigurationProperties(prefix = "spring.redisson.sentinel")
+@ConditionalOnProperty(name = "spring.redisson.type", havingValue = "sentinel", matchIfMissing = true)
 public class RedissonSentinelConfig {
 
     private List<String> sentinelAddresses = new ArrayList<>();
 
     private String masterName;
 
-    private String password;
+    private String passWord;
 
     @Bean
     public Config config() throws Exception {
@@ -39,7 +39,7 @@ public class RedissonSentinelConfig {
         config.useSentinelServers()
                 .addSentinelAddress(nodes)
                 .setMasterName(masterName)
-                .setPassword(password)
+                .setPassword(passWord)
                 .setConnectTimeout(1000 * 60 * 3);
         config.setEventLoopGroup(new NioEventLoopGroup());
         return config;

@@ -8,9 +8,9 @@ import org.redisson.config.ReadMode;
 import org.redisson.config.SubscriptionMode;
 import org.redisson.connection.balancer.LoadBalancer;
 import org.redisson.connection.balancer.RoundRobinLoadBalancer;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.ClassUtils;
 
@@ -23,8 +23,8 @@ import java.util.List;
  */
 @Data
 @Configuration
-@Conditional(RedissonClusterCondition.class)
-@ConfigurationProperties(prefix = "spring.redisson")
+@ConfigurationProperties(prefix = "spring.redisson.cluster")
+@ConditionalOnProperty(name = "spring.redisson.type", havingValue = "cluster", matchIfMissing = true)
 public class RedissonClusterConfig {
 
     private LoadBalancer loadBalancer = new RoundRobinLoadBalancer();
@@ -110,3 +110,4 @@ public class RedissonClusterConfig {
     }
 
 }
+

@@ -34,11 +34,12 @@ spring:
 
 #  redisson 配置
   redisson:
-    type: SENTINEL
-    masterName: mymaster
-    passWord: smstest
-    sentinelAddresses:
-      - "redis://192.168.0.100:8877"
-      - "redis://192.168.0.101:8877"
-      - "redis://192.168.0.102:8877"
+    type: sentinel
+    sentinel:
+      masterName: mymaster
+      passWord: smstest
+      sentinelAddresses:
+        - "redis://192.168.0.100:8877"
+        - "redis://192.168.0.101:8877"
+        - "redis://192.168.0.102:8877"
 
