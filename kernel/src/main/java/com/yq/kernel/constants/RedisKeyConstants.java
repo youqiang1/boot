@@ -16,4 +16,14 @@ public class RedisKeyConstants {
      */
     public static final String ACCOUNT_BALANCE = "account_balance";
 
+    /**
+     * 发送消息
+     */
+    public static final String SEND_MESSAGE = "sendMessage";
+
+    /**
+     * 发送上下文
+     */
+    public static String SEND_MESSAGE_CONTEXT = "sendMessageContext";
+
 }

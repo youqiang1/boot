@@ -1,0 +1,44 @@
+﻿﻿server:
+  port: 16092
+  context-path: /
+
+spring:
+  application:
+    name: boot-sms-client
+  datasource:
+    url: jdbc:mysql://192.168.20.207:3306/client_dev?useUnicode=true&characterEncoding=utf8&useSSL=false
+    username: unioncast
+    password: unioncast
+    driverClassName: com.mysql.jdbc.Driver
+    tomcat:
+      validation-query: SELECT 1
+      test-while-idle: true
+  jpa:
+    hibernate.ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
+
+#  redisson 的单机版配置
+  redisson:
+    type: single
+    single:
+      address: "redis://192.168.10.114:6379"
+      connectionMinimumIdleSize: 10
+      idleConnectionTimeout: 10000
+      pingTimeout: 1000
+      connectTimeout: 10000
+      timeout: 3000
+      retryAttempts: 3
+      retryInterval: 1500
+      password:
+      subscriptionsPerConnection: 5
+      clientName: null
+      subscriptionConnectionMinimumIdleSize: 1
+      subscriptionConnectionPoolSize: 50
+      connectionPoolSize: 64
+      database: 0
+      dnsMonitoring: false
+      dnsMonitoringInterval: 5000
+      codec: org.redisson.codec.JsonJacksonCodec
