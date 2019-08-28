@@ -66,7 +66,7 @@ public class HeadProcessProtocolEncoder implements ProtocolEncoder {
 		} catch (Exception e) {
 			log.error("write channel exception:", e);
 		}
-		log.info("短信提交通道完成");
+		log.info("信息提交通道完成");
 	}
 
 	public void dispose(IoSession session) throws Exception {

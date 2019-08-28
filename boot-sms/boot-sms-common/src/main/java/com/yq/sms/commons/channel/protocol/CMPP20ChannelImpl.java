@@ -6,7 +6,7 @@ import com.yq.redisop.model.SendMessageContextModel;
 import com.yq.redisop.service.SendMessageContextRedisService;
 import com.yq.sms.commons.channel.pool.SocketConnectionPool;
 import com.yq.sms.commons.constants.CmppCommandConstant;
-import com.yq.sms.commons.constants.ConnectConstants;
+import com.yq.sms.commons.constants.SmsConstants;
 import com.yq.sms.commons.enu.ChannelStateEnum;
 import com.yq.sms.commons.model.ChannelModel;
 import com.yq.sms.commons.model.SendMsgRequest;
@@ -17,6 +17,7 @@ import com.yq.sms.commons.sms.cmpp20.*;
 import com.yq.sms.commons.sms.packet.HeadBodyBaseMessage;
 import com.yq.sms.commons.sms.packet.SendMessageContext;
 import com.yq.sms.commons.spring.BeanFactoryUtils;
+import com.yq.sms.commons.task.ChannelTaskInterface;
 import com.yq.sms.commons.task.SocketSessionCheckThread;
 import com.yq.sms.commons.util.DataTypeConvert;
 import com.yq.sms.commons.util.MessageIdUtil;
@@ -68,6 +69,7 @@ public class CMPP20ChannelImpl implements IChannel {
             checkThread.start();
             Thread checkStartThread = new Thread(checkThread);
             checkStartThread.start();
+            ChannelCommon.getInstance().channelTaskMap.get(channelId).add(checkThread);
         } catch (Exception e) {
             log.error("通道启动失败：", e);
         }
@@ -94,23 +96,23 @@ public class CMPP20ChannelImpl implements IChannel {
             byte[] sendByte = DataTypeConvert.GetSendContent(headMessage, cmpp20Connect);
             log.info("【CMPP20_CONNECT】-head【{}】  body【{}】", headMessage.toString(), cmpp20Connect.toString());
             ioSession.write(sendByte);
-            while (!ioSession.containsAttribute(ConnectConstants.CONNECT_RESP) && ioSession.isConnected()) {
+            while (!ioSession.containsAttribute(SmsConstants.CONNECT_RESP) && ioSession.isConnected()) {
                 try {
                     Thread.sleep(30);
                 } catch (InterruptedException ignored) {}
-                if (ioSession.containsAttribute(ConnectConstants.SESSION_CLOSE)) {
+                if (ioSession.containsAttribute(SmsConstants.SESSION_CLOSE)) {
                     break;
                 }
             }
-            if (!ioSession.containsAttribute(ConnectConstants.SESSION_CLOSE)) {
-                Cmpp20ConnectResp connectResp = (Cmpp20ConnectResp) ioSession.getAttribute(ConnectConstants.CONNECT_RESP);
+            if (!ioSession.containsAttribute(SmsConstants.SESSION_CLOSE)) {
+                Cmpp20ConnectResp connectResp = (Cmpp20ConnectResp) ioSession.getAttribute(SmsConstants.CONNECT_RESP);
                 if (connectResp == null) {
                     log.info("cmpp2.0协议网关，获取网络状态为空，请检查网关协议是否正确。");
                     return;
                 }
                 log.info("[cmpp20]协议登录返回头信息，状态报告：{}", connectResp.getStatus());
                 if (0 == connectResp.getStatus()) {
-                    ioSession.setAttribute(ConnectConstants.LOGIN_STATUE, true);
+                    ioSession.setAttribute(SmsConstants.LOGIN_STATUE, true);
                 }
             }
         } catch (Exception e) {
@@ -120,12 +122,43 @@ public class CMPP20ChannelImpl implements IChannel {
 
     @Override
     public ChannelStateEnum stop() {
-        return null;
+        // 销毁任务进程
+        List<ChannelTaskInterface> tasks = ChannelCommon.getInstance().channelTaskMap.get(channelId);
+        for (ChannelTaskInterface task : tasks) {
+            if (task instanceof SocketSessionCheckThread) {
+                SocketSessionCheckThread thread = (SocketSessionCheckThread) task;
+                thread.close();
+            }
+            int count = 0;
+            while (task.state()) {
+                count++;
+                task.stop();
+                if (count > 10) {
+                    break;
+                }
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException ignored) {}
+            }
+        }
+        //清除任务对象和线程池对象
+        ChannelCommon.getInstance().channelTaskMap.remove(channelId);
+        ChannelCommon.getInstance().channelPoolMap.remove(channelId);
+        if (pool != null) {
+            pool = null;
+        }
+        return state;
     }
 
     @Override
     public void logoutBySession(IoSession ioSession) {
-
+        Cmpp20HeadMessage headMessage = new Cmpp20HeadMessage();
+        headMessage.setCommandId(CmppCommandConstant.CMPP_TERMINATE);
+        headMessage.setSequenceId(MessageIdUtil.getInstance().getId());
+        headMessage.setTotalLength(12);
+        headMessage.objectToByte();
+        log.info("断开连接：{}", headMessage.toString());
+        ioSession.write(headMessage.bitContent);
     }
 
     @Override
@@ -158,7 +191,7 @@ public class CMPP20ChannelImpl implements IChannel {
                 if (connectResp.getStatus() != 0) {
                     this.state = ChannelStateEnum.EXCEPTION;
                 }
-                ioSession.setAttribute(ConnectConstants.CONNECT_RESP, connectResp);
+                ioSession.setAttribute(SmsConstants.CONNECT_RESP, connectResp);
                 break;
             case CmppCommandConstant.CMPP_TERMINATE_RESP:
                 log.info("断开连接回复：{}", DataTypeConvert.bytesToHexString(message.getContent()));
@@ -192,13 +225,15 @@ public class CMPP20ChannelImpl implements IChannel {
                 activeTestResp.byteToObject(message.getContent());
                 log.info("心跳响应：{}", activeTestResp.toString());
                 //心跳无响应次数清零
-                ioSession.setAttribute(ConnectConstants.HEARTBEAT_NOT_RESP, 0);
+                ioSession.setAttribute(SmsConstants.HEARTBEAT_NOT_RESP, 0);
                 break;
             case CmppCommandConstant.CMPP_FWD_RESP:
                 Cmpp20FwdResp fwdResp = new Cmpp20FwdResp();
                 fwdResp.setHeadMessage(headMessage);
                 fwdResp.byteToObject(message.getContent());
                 log.info("FWD响应：{}", fwdResp.toString());
+                responseService = new ResponseService();
+                responseService.processResponse(fwdResp);
                 break;
             default:
                 log.info("错误的命令类型：{}", headMessage.getCommandId());
@@ -208,7 +243,12 @@ public class CMPP20ChannelImpl implements IChannel {
     }
 
     @Override
-    public void sendMessage(SendMsgRequest request, String messageId, LocalDateTime submitTime) {
+    public void sendMessage(SendMsgRequest request, String messageId, LocalDateTime submitTime, boolean isFwd) {
+        if (isFwd) {
+            log.info("FWD消息，messageId: {}", messageId);
+            sendMessageForFwd(request, messageId, submitTime);
+            return;
+        }
         IoSession ioSession = null;
         try {
             ioSession = ChannelCommon.getInstance().channelPoolMap.get(request.getChannelId()).getIoSession();
@@ -286,6 +326,90 @@ public class CMPP20ChannelImpl implements IChannel {
 
             if (contexts.size() > 0) {
                 log.info("短信开始提交通道: {}", contexts);
+                ioSession.write(contexts);
+            }
+        } finally {
+            if (ioSession != null) {
+                ChannelCommon.getInstance().channelPoolMap.get(channelId).putIoSession(ioSession);
+            }
+        }
+    }
+
+    /**
+     * <p> FWD发送，能发但是整体逻辑有问题，待处理</p>
+     * @author youq  2019/8/28 15:22
+     */
+    private void sendMessageForFwd(SendMsgRequest request, String messageId, LocalDateTime submitTime) {
+        IoSession ioSession = null;
+        try {
+            ioSession = ChannelCommon.getInstance().channelPoolMap.get(request.getChannelId()).getIoSession();
+            if (ioSession == null) {
+                log.info("无法获取到连接信息");
+                return;
+            }
+            //通道号
+            String channelNumber = channelModel.getChannelNumber() + (StringUtils.isEmpty(request.getExtendedCode()) ? "" : request.getExtendedCode());
+            //submit实体
+            Cmpp20Fwd cmpp20Fwd = new Cmpp20Fwd();
+            cmpp20Fwd.setSourceId("123456");
+            cmpp20Fwd.setDestinationId("123455");
+            cmpp20Fwd.setNodesCount(1);
+            cmpp20Fwd.setMsgFwdType(0);
+            cmpp20Fwd.setPkTotal(1);
+            cmpp20Fwd.setPkNumber(1);
+            cmpp20Fwd.setRegisteredDelivery(1);
+            cmpp20Fwd.setMsgLevel(0);
+            cmpp20Fwd.setServiceId(channelModel.getServiceCode());
+            cmpp20Fwd.setFeeUserType(0);
+            cmpp20Fwd.setFeeTerminalId("");
+            cmpp20Fwd.setTpPid(0);
+            cmpp20Fwd.setTpUdhi(0);
+            cmpp20Fwd.setMsgFmt(15);
+            cmpp20Fwd.setMsgSrc(channelModel.getSpId());
+            cmpp20Fwd.setFeeType("01");
+            cmpp20Fwd.setFeeCode("0000");
+            cmpp20Fwd.setValidTime("");
+            cmpp20Fwd.setSrcId(channelNumber);
+            cmpp20Fwd.setDestUsrTl(1);
+            cmpp20Fwd.setDestId(request.getMobile());
+            cmpp20Fwd.setMsgContent(request.getMsg());
+            cmpp20Fwd.setReserve("");
+            cmpp20Fwd.setAtTime("");
+            List<byte[]> list = CMPP20LongMessage.fwdLongMsgProcess(cmpp20Fwd, messageId);
+            if (CollectionUtils.isEmpty(list)) {
+                log.info("FWD短信拼接失败。。。");
+                return;
+            }
+            //消息头
+            Cmpp20HeadMessage headMessage = new Cmpp20HeadMessage();
+            headMessage.setCommandId(CmppCommandConstant.CMPP_FWD);
+
+            List<SendMessageContext> contexts = Lists.newArrayListWithCapacity(list.size());
+
+            for (byte[] aList : list) {
+                headMessage.setSequenceId(MessageIdUtil.getInstance().getId());
+                headMessage.setTotalLength(aList.length + 12);
+                headMessage.objectToByte();
+                cmpp20Fwd.bitContent = aList;
+                byte[] sendBytes = DataTypeConvert.GetSendContent(headMessage, cmpp20Fwd);
+                HashMap<String, String> sendPackage = new HashMap<>();
+                sendPackage.put("mobile", request.getMobile());
+                sendPackage.put("addSerial", request.getExtendedCode());
+                sendPackage.put("smsId", messageId);
+                sendPackage.put("sendTime", System.currentTimeMillis() + "");
+                sendPackage.put("userId", request.getUserId());
+
+                SendMessageContext context = new SendMessageContext();
+                context.setSendObject(sendPackage);
+                context.setSendKey(headMessage.getSequenceId() + "");
+                context.setSendContent(sendBytes);
+                context.setSubmitTime(submitTime);
+
+                contexts.add(context);
+            }
+
+            if (contexts.size() > 0) {
+                log.info("FWD短信开始提交通道: {}", contexts);
                 ioSession.write(contexts);
             }
         } finally {

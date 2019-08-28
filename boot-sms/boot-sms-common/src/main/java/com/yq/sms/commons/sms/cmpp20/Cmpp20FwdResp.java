@@ -26,6 +26,7 @@ public class Cmpp20FwdResp extends IHeadBodyMessage {
     public void byteToObject(byte[] content) {
         this.bitContent = content;
         int indexOf = 0;
+        msgId = new byte[8];
         System.arraycopy(content, indexOf, msgId, 0, 8);
         indexOf += 8;
         pkTotal = content[indexOf];

@@ -34,4 +34,8 @@ public abstract class ChannelTaskInterface implements Runnable {
         isRun = false;
     }
 
+    public boolean state() {
+        return isRun;
+    }
+
 }

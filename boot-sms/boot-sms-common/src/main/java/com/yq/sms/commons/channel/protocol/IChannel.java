@@ -38,9 +38,10 @@ public interface IChannel {
      * @param request    SendMsgRequest
      * @param messageId  消息id
      * @param submitTime 提交时间
+     * @param isFwd      是否FWD消息
      * @author youq  2019/8/26 16:18
      */
-    void sendMessage(SendMsgRequest request, String messageId, LocalDateTime submitTime);
+    void sendMessage(SendMsgRequest request, String messageId, LocalDateTime submitTime, boolean isFwd);
 
     void setState(ChannelStateEnum state);
 

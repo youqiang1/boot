@@ -4,7 +4,7 @@ package com.yq.sms.commons.constants;
  * <p> 常量</p>
  * @author youq  2019/8/23 20:19
  */
-public class ConnectConstants {
+public class SmsConstants {
 
     public static String LOGIN_STATUE = "loginStatus";
 
@@ -21,5 +21,11 @@ public class ConnectConstants {
      * 连接通道中读取的数据内容
      */
     public static String READ_CONTENT = "readContent";
+
+    public static String CHARACTER_GBK = "GBK";
+
+    public static String CHARACTER_UTF8 = "UTF-8";
+
+    public static String CHARACTER_UNICODE = "UnicodeBigUnmarked";
 
 }

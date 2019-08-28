@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 /**
  * <p> 通道信息service</p>
@@ -54,6 +55,7 @@ public class ChannelService {
             model.setId(channelInfo.getId().toString());
             //通道配置信息写入ChannelCommon
             ChannelCommon.getInstance().channelModelMap.put(channelId, model);
+            ChannelCommon.getInstance().channelTaskMap.put(channelId, new ArrayList<>());
             IChannel iChannel = ChannelCommon.getInstance().getChannel(model);
             if (iChannel == null) {
                 log.info("获取通道实现对象失败");
@@ -76,8 +78,40 @@ public class ChannelService {
                 return true;
             }
             log.info("通道【{}】启动失败", model.getName());
-        } catch (InterruptedException e) {
+        } catch (Exception e) {
             log.error("channel start exception: ", e);
+        }
+        return false;
+    }
+
+    /**
+     * <p> 根据通道id停止通道</p>
+     * @param channelId 通道id
+     * @return boolean
+     * @author youq  2019/8/26 10:08
+     */
+    public boolean stop(String channelId) {
+        try {
+            ChannelInfo channelInfo = channelRepository.findOne(Integer.parseInt(channelId));
+            if (channelInfo == null) {
+                return false;
+            }
+            ChannelModel model = new ChannelModel();
+            BeanUtils.copyProperties(channelInfo, model);
+            model.setId(channelInfo.getId().toString());
+            synchronized (model.getChannelNumber()) {
+                IChannel iChannel = ChannelCommon.getInstance().channelImplMap.get(channelId);
+                if (iChannel == null) {
+                    return true;
+                }
+                iChannel.setState(ChannelStateEnum.STOP);
+                iChannel.stop();
+                ChannelCommon.getInstance().channelImplMap.remove(channelId);
+                log.info("停止通道【{}】完成", model.getName());
+                return true;
+            }
+        } catch (Exception e) {
+            log.error("channel stop exception: ", e);
         }
         return false;
     }
@@ -104,10 +138,39 @@ public class ChannelService {
     /**
      * <p> 发送短信</p>
      * @param request 请求参数
+     * @param isFwd   是否FWD消息
      * @return boolean
      * @author youq  2019/8/26 14:41
      */
-    public boolean sendMsg(SendMsgRequest request) {
+    public boolean sendMsg(SendMsgRequest request, boolean isFwd) {
+        boolean flag = verify(request);
+        if (!flag) {
+            return false;
+        }
+        String messageId = MessageIdUtil.getInstance().getMessageId();
+        LocalDateTime submitTime = LocalDateTime.now();
+        //已发信息入redis
+        if (!isFwd) {
+            SendMessageModel model = SendMessageModel.builder()
+                    .key(messageId + request.getMobile())
+                    .messageId(messageId)
+                    .mobile(request.getMobile())
+                    .userId(request.getUserId())
+                    .msg(request.getMsg())
+                    .channelId(request.getChannelId())
+                    .extendedCode(request.getExtendedCode())
+                    .submitTime(submitTime)
+                    .saveFlag(false)
+                    .build();
+            sendMessageRedisService.save(model);
+        }
+        //发送
+        IChannel iChannel = ChannelCommon.getInstance().channelImplMap.get(request.getChannelId());
+        iChannel.sendMessage(request, messageId, submitTime, isFwd);
+        return true;
+    }
+
+    private boolean verify(SendMsgRequest request) {
         if (request == null || StringUtils.isEmpty(request.getChannelId()) || StringUtils.isEmpty(request.getMsg())) {
             log.info("请求参数异常");
             return false;
@@ -126,23 +189,6 @@ public class ChannelService {
             log.info("通道暂无连接，无法发送");
             return false;
         }
-        String messageId = MessageIdUtil.getInstance().getMessageId();
-        LocalDateTime submitTime = LocalDateTime.now();
-        //已发信息入redis
-        SendMessageModel model = SendMessageModel.builder()
-                .key(messageId + request.getMobile())
-                .messageId(messageId)
-                .mobile(request.getMobile())
-                .userId(request.getUserId())
-                .msg(request.getMsg())
-                .channelId(request.getChannelId())
-                .extendedCode(request.getExtendedCode())
-                .submitTime(submitTime)
-                .saveFlag(false)
-                .build();
-        sendMessageRedisService.save(model);
-        //发送
-        iChannel.sendMessage(request, messageId, submitTime);
         return true;
     }
 

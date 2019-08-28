@@ -2,7 +2,7 @@ package com.yq.sms.commons.channel.client;
 
 import com.yq.sms.commons.channel.protocol.IChannel;
 import com.yq.sms.commons.constants.CmppCommandConstant;
-import com.yq.sms.commons.constants.ConnectConstants;
+import com.yq.sms.commons.constants.SmsConstants;
 import com.yq.sms.commons.enu.ProtocolTypeEnum;
 import com.yq.sms.commons.model.ChannelModel;
 import com.yq.sms.commons.sms.ChannelCommon;
@@ -58,12 +58,12 @@ public class SocketClientHandler implements IoHandler {
         log.info("client session idle，status【{}】", status);
         if (IdleStatus.BOTH_IDLE == status) {
             ChannelModel model = ChannelCommon.getInstance().channelModelMap.get(channelId);
-            Object heartbeatNotResp = session.getAttribute(ConnectConstants.HEARTBEAT_NOT_RESP);
+            Object heartbeatNotResp = session.getAttribute(SmsConstants.HEARTBEAT_NOT_RESP);
             if (Objects.nonNull(heartbeatNotResp)) {
                 int heartbeatNotRespCount = Integer.parseInt(heartbeatNotResp.toString());
                 if (heartbeatNotRespCount < 3) {
                     heartbeatNotRespCount += 1;
-                    session.setAttribute(ConnectConstants.HEARTBEAT_NOT_RESP, heartbeatNotRespCount);
+                    session.setAttribute(SmsConstants.HEARTBEAT_NOT_RESP, heartbeatNotRespCount);
                 } else {
                     log.info("通道【{}】心跳监测三次未响应，关闭连接", model.getName());
                     session.close(false);

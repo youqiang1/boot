@@ -7,6 +7,7 @@ import com.yq.redisop.model.SendMessageContextModel;
 import com.yq.redisop.model.SendMessageModel;
 import com.yq.redisop.service.SendMessageContextRedisService;
 import com.yq.redisop.service.SendMessageRedisService;
+import com.yq.sms.commons.sms.cmpp20.Cmpp20FwdResp;
 import com.yq.sms.commons.sms.cmpp20.Cmpp20SubmitResp;
 import com.yq.sms.commons.spring.BeanFactoryUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -52,6 +53,34 @@ public class ResponseService {
                 }
             } else {
                 log.info("响应已比对完成，不再比对");
+            }
+        } else if (processObject instanceof Cmpp20FwdResp) {
+            Cmpp20FwdResp fwdResp = (Cmpp20FwdResp) processObject;
+            SendMessageContextModel model = sendMessageContextRedisService.getAndDel(fwdResp.getHeadMessage().getSequenceId() + "");
+            if (model != null) {
+                String operatorMessageId = new String(fwdResp.getMsgId());
+                HashMap<String, String> sendPackage = model.getSendObject();
+                String messageId = sendPackage.get("smsId");
+                String sendTimeLong = sendPackage.get("sendTime");
+                LocalDateTime sendTime = DateUtils.millisecond2LocalDateTime(Long.parseLong(sendTimeLong));
+                String mobile = sendPackage.get("mobile");
+                SendMessageModel sendMessageModel = sendMessageRedisService.getAndDel(messageId + mobile);
+                //已发数据处理
+                if (sendMessageModel != null) {
+                    String newKey = operatorMessageId + mobile;
+                    sendMessageModel.setSendTime(sendTime);
+                    sendMessageModel.setKey(newKey);
+                    sendMessageModel.setOperatorMessageId(operatorMessageId);
+                    sendMessageModel.setState(fwdResp.getResult() == 0 ? GlobalConstants.SUCCESS : GlobalConstants.FAIL);
+                    sendMessageModel.setExplain(fwdResp.getResult() == 0 ? "" : "响应失败");
+                    sendMessageModel.setSaveFlag(fwdResp.getResult() != 0);
+                    sendMessageModel.setBillingCount(model.getBillingCount());
+                    sendMessageRedisService.save(sendMessageModel);
+                } else {
+                    log.info("数据已处理");
+                }
+            } else {
+                log.info("响应比对完成，不再比对");
             }
         } else {
             log.info("无法识别的响应信息：{}", ObjectUtils.toJson(processObject));

@@ -37,6 +37,19 @@ public class ChannelController {
         return ResultData.success();
     }
 
+    @RequestMapping("/stop")
+    public ResultData<?> stop(String channelId) {
+        log.info("channel stop, channelId【{}】", channelId);
+        if (StringUtils.isEmpty(channelId)) {
+            return ResultData.failMsg("channelId异常");
+        }
+        boolean startFlag = channelService.stop(channelId);
+        if (!startFlag) {
+            return ResultData.fail();
+        }
+        return ResultData.success();
+    }
+
     @PostMapping("/add")
     public ResultData<?> add(@RequestBody ChannelEditRequest request) {
         boolean flag = channelService.add(request);
@@ -48,7 +61,22 @@ public class ChannelController {
 
     @PostMapping("/sendMsg")
     public ResultData<?> sendMsg(@RequestBody SendMsgRequest request) {
-        boolean flag = channelService.sendMsg(request);
+        boolean flag = channelService.sendMsg(request, false);
+        if (!flag) {
+            return ResultData.fail();
+        }
+        return ResultData.success();
+    }
+
+    /**
+     * <p> FWD短信发送，整体流程（响应、状态报告处理）还有问题，但能正常发送至通道方</p>
+     * @param request SendMsgRequest
+     * @return com.yq.kernel.model.ResultData<?>
+     * @author youq  2019/8/28 16:13
+     */
+    @PostMapping("/sendMsgForFwd")
+    public ResultData<?> sendMsgForFwd(@RequestBody SendMsgRequest request) {
+        boolean flag = channelService.sendMsg(request, true);
         if (!flag) {
             return ResultData.fail();
         }

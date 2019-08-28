@@ -1,7 +1,7 @@
 package com.yq.sms.commons.channel.codec;
 
 import com.yq.kernel.enu.OperatorTypeEnum;
-import com.yq.sms.commons.constants.ConnectConstants;
+import com.yq.sms.commons.constants.SmsConstants;
 import com.yq.sms.commons.sms.packet.HeadBodyBaseMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.mina.core.buffer.IoBuffer;
@@ -27,11 +27,11 @@ public class HeadProcessProtocolDecoder implements ProtocolDecoder {
 	public void decode(IoSession session, IoBuffer in, ProtocolDecoderOutput out) throws Exception {
 		try {
 			IoBuffer buf;
-			if (session.containsAttribute(ConnectConstants.READ_CONTENT)) {
-				buf = (IoBuffer) session.getAttribute(ConnectConstants.READ_CONTENT);
+			if (session.containsAttribute(SmsConstants.READ_CONTENT)) {
+				buf = (IoBuffer) session.getAttribute(SmsConstants.READ_CONTENT);
 			} else {
 				buf = IoBuffer.allocate(40960).setAutoExpand(true);
-				session.setAttribute(ConnectConstants.READ_CONTENT, buf);
+				session.setAttribute(SmsConstants.READ_CONTENT, buf);
 			}
             // 将读取到的信息放入缓存
 			buf.put(in);
@@ -96,8 +96,8 @@ public class HeadProcessProtocolDecoder implements ProtocolDecoder {
 	}
 
 	public void dispose(IoSession session) throws Exception {
-		if (session.containsAttribute(ConnectConstants.READ_CONTENT)) {
-			session.removeAttribute(ConnectConstants.READ_CONTENT);
+		if (session.containsAttribute(SmsConstants.READ_CONTENT)) {
+			session.removeAttribute(SmsConstants.READ_CONTENT);
 		}
 	}
 

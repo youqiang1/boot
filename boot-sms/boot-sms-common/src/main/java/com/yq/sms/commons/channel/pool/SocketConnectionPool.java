@@ -1,7 +1,7 @@
 package com.yq.sms.commons.channel.pool;
 
 import com.yq.sms.commons.channel.codec.HeadProcessProtocolCodecFactory;
-import com.yq.sms.commons.constants.ConnectConstants;
+import com.yq.sms.commons.constants.SmsConstants;
 import com.yq.sms.commons.enu.ProtocolTypeEnum;
 import com.yq.sms.commons.model.ChannelModel;
 import com.yq.sms.commons.sms.ChannelCommon;
@@ -34,7 +34,7 @@ public class SocketConnectionPool {
 
     public IoAcceptor acceptor;
 
-    private List<IoSession> ioSessions = Collections.synchronizedList(new ArrayList<>());
+    public List<IoSession> ioSessions = Collections.synchronizedList(new ArrayList<>());
 
     private LinkedBlockingQueue<IoSession> sessionQueue = new LinkedBlockingQueue<>();
 
@@ -137,13 +137,13 @@ public class SocketConnectionPool {
      * @author youq  2019/8/23 20:38
      */
     public synchronized void removeIoSession(IoSession ioSession) {
-        ioSession.setAttribute(ConnectConstants.SESSION_CLOSE, true);
+        ioSession.setAttribute(SmsConstants.SESSION_CLOSE, true);
         ioSessions.remove(ioSession);
         boolean flag = sessionQueue.remove(ioSession);
         if (flag) {
-            if (ioSession.containsAttribute(ConnectConstants.READ_CONTENT)) {
+            if (ioSession.containsAttribute(SmsConstants.READ_CONTENT)) {
                 try {
-                    IoBuffer ioBuffer = (IoBuffer) ioSession.getAttribute(ConnectConstants.READ_CONTENT);
+                    IoBuffer ioBuffer = (IoBuffer) ioSession.getAttribute(SmsConstants.READ_CONTENT);
                     ioBuffer.clear();
                 } catch (Exception e) {
                     log.error("removeIoSession exception: ", e);

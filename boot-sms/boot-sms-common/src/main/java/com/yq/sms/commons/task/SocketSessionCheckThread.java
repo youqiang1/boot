@@ -3,7 +3,7 @@ package com.yq.sms.commons.task;
 import com.yq.kernel.enu.OperatorTypeEnum;
 import com.yq.sms.commons.channel.pool.SocketConnectionPool;
 import com.yq.sms.commons.channel.protocol.IChannel;
-import com.yq.sms.commons.constants.ConnectConstants;
+import com.yq.sms.commons.constants.SmsConstants;
 import com.yq.sms.commons.enu.ChannelStateEnum;
 import com.yq.sms.commons.model.ChannelModel;
 import com.yq.sms.commons.sms.ChannelCommon;
@@ -53,7 +53,7 @@ public class SocketSessionCheckThread extends ChannelTaskInterface {
                 log.info("通道连接成功，准备开始登陆");
                 //登陆
                 iChannel.loginBySession(ioSession, model);
-                if (ioSession.containsAttribute(ConnectConstants.LOGIN_STATUE)) {
+                if (ioSession.containsAttribute(SmsConstants.LOGIN_STATUE)) {
                     pool.addIoSession(ioSession);
                     iChannel.setState(ChannelStateEnum.RUNNING);
                     log.info("登陆成功，ip: {}, port: {}", model.getHost(), model.getPort());
@@ -62,6 +62,25 @@ public class SocketSessionCheckThread extends ChannelTaskInterface {
                     log.info("登陆失败，ip: {}, port: {}", model.getHost(), model.getPort());
                 }
             }
+        }
+    }
+
+    public void close() {
+        // 关闭连接
+        for (int i = 0; i < pool.getIoSessionSize(); i++) {
+            IoSession session = pool.ioSessions.get(i);
+            if (session != null) {
+                IChannel channel = ChannelCommon.getInstance().channelImplMap.get(model.getId());
+                channel.logoutBySession(session);
+            }
+        }
+        // 销毁框架
+        if (pool.acceptor != null) {
+            pool.acceptor.unbind();
+            pool.acceptor.dispose();
+        }
+        if (pool.connector != null) {
+            pool.connector.dispose();
         }
     }
 
