@@ -78,6 +78,7 @@ public class ChannelService {
                 return true;
             }
             log.info("通道【{}】启动失败", model.getName());
+            stop(channelId);
         } catch (Exception e) {
             log.error("channel start exception: ", e);
         }
