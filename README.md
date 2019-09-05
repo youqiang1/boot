@@ -149,3 +149,8 @@ springboot
     描述：Spring Boot + sms
     http端口：16092
        
+####boot-redis
+    名称：boot-redis
+    描述：Spring Boot + redisTemplate
+    http端口：16093
+       
