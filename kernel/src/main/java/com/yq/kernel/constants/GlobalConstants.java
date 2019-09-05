@@ -21,4 +21,6 @@ public class GlobalConstants {
      */
     public static final String PID_FILE_NAME = "application.pid";
 
+    public static final String UTF8 = "UTF-8";
+
 }

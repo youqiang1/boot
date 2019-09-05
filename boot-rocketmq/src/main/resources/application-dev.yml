@@ -1,0 +1,19 @@
+server:
+  port: 16094
+  context-path: /
+
+spring:
+  application:
+    name: BOOT-ROCKETMQ
+
+rocketmq:
+  producer:
+    groupName: yq01
+    nameSrvAddr: 192.168.101.200:9876
+    default: true
+    tranGroupName: yq02
+  consumer:
+    groupName: yq02
+    nameSrvAddr: 192.168.101.200:9876
+
+

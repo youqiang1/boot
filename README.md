@@ -154,3 +154,8 @@ springboot
     描述：Spring Boot + redisTemplate
     http端口：16093
        
+####boot-rocketmq
+    名称：boot-rocketmq
+    描述：simple spring boot + rocketmq
+    http端口：16094
+       
