@@ -1,0 +1,10 @@
+server:
+  port: 16095
+  context-path: /
+
+spring:
+  application:
+    name: BOOT-FTPS
+
+
+

@@ -158,4 +158,9 @@ springboot
     名称：boot-rocketmq
     描述：simple spring boot + rocketmq
     http端口：16094
+         
+####boot-ftps
+    名称：boot-ftps
+    描述：simple spring boot + ftps
+    http端口：16095
        
