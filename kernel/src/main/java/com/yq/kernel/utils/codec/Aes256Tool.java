@@ -1,4 +1,4 @@
-package com.yq.kernel.utils.file;
+package com.yq.kernel.utils.codec;
 
 import com.yq.kernel.constants.GlobalConstants;
 import lombok.extern.slf4j.Slf4j;

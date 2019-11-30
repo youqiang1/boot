@@ -1,4 +1,4 @@
-package com.yq.kernel.utils;
+package com.yq.kernel.utils.codec;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
