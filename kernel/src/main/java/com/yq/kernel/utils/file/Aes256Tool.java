@@ -25,8 +25,8 @@ public class Aes256Tool {
         String encryptStr = encrypt("123");
         System.out.println(encryptStr);
         System.out.println(new String(decrypt(encryptStr), GlobalConstants.UTF8));
-        encoderFile("E:\\youq\\yx\\111", "1.zip", "E:\\youq\\yx");
-        decoderFile("E:\\youq\\yx", "1.zip", "E:\\youq\\yx\\111");
+        decoderFile("E:\\youq\\yx", "726171773_101_20191105143448_068856_1.zip", "E:\\youq\\yx\\111");
+        encoderFile("E:\\youq\\yx\\111", "726171773_101_20191105143448_068856_1.zip", "E:\\youq\\yx");
     }
 
     /**
@@ -54,7 +54,8 @@ public class Aes256Tool {
                 t++;
             }
             byte[] byte_ASE = getEnCipher().doFinal(dataBytes);
-            String encode = new BASE64Encoder().encode(byte_ASE);
+            String encode = new BASE64Encoder().encodeBuffer(byte_ASE);
+            encode = encode.replaceAll("\r|\n", "");
             out.write(encode.getBytes(GlobalConstants.UTF8));
             out.flush();
         } catch (Exception e) {
@@ -97,7 +98,8 @@ public class Aes256Tool {
                 t++;
             }
             //解密
-            byte[] byte_ASE = new BASE64Decoder().decodeBuffer(new String(dataBytes, GlobalConstants.UTF8));
+            String data = new String(dataBytes, GlobalConstants.UTF8);
+            byte[] byte_ASE = new BASE64Decoder().decodeBuffer(data);
             out.write(getDeCipher().doFinal(byte_ASE));
             out.flush();
         } catch (Exception e) {
