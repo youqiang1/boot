@@ -27,7 +27,7 @@
     <dependencies>
         <dependency>
             <groupId>com.yq.starter</groupId>
-            <artifactId>boot-start</artifactId>
+            <artifactId>boot-starter</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
