@@ -1,0 +1,9 @@
+﻿﻿server:
+  port: 16096
+  context-path: /
+spring:
+  application:
+    name: boot-mongo
+  data:
+    mongodb:
+      uri: mongodb://192.168.101.2:27988/test

@@ -163,4 +163,9 @@ springboot
     名称：boot-ftps
     描述：simple spring boot + ftps
     http端口：16095
+              
+####boot-mongo
+    名称：boot-mongo
+    描述：simple spring boot + mongo
+    http端口：16096
        
