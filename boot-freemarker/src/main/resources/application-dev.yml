@@ -1,0 +1,7 @@
+﻿server:
+  port: 16097
+  context-path: /
+
+spring:
+  application:
+    name: boot-freemarker

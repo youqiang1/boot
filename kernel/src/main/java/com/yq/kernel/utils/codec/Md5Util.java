@@ -1,8 +1,8 @@
 package com.yq.kernel.utils.codec;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.codec.binary.Base64;
 import org.springframework.util.StringUtils;
-import sun.misc.BASE64Encoder;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
@@ -29,9 +29,8 @@ public class Md5Util {
             return null;
         }
         try {
-            BASE64Encoder base64en = new BASE64Encoder();
             //加密后的字符串
-            return base64en.encode(messageDigest.digest(rawPass.trim().getBytes("utf-8")));
+            return Base64.encodeBase64String(messageDigest.digest(rawPass.trim().getBytes("utf-8")));
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }

@@ -168,4 +168,9 @@ springboot
     名称：boot-mongo
     描述：simple spring boot + mongo
     http端口：16096
+                 
+####boot-freemarker
+    名称：boot-freemarker
+    描述：simple spring boot + freemarker
+    http端口：16097
        

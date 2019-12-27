@@ -2,8 +2,7 @@ package com.yq.kernel.utils.codec;
 
 import com.yq.kernel.constants.GlobalConstants;
 import lombok.extern.slf4j.Slf4j;
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
+import org.apache.commons.codec.binary.Base64;
 
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
@@ -54,7 +53,7 @@ public class Aes256Tool {
                 t++;
             }
             byte[] byte_ASE = getEnCipher().doFinal(dataBytes);
-            String encode = new BASE64Encoder().encodeBuffer(byte_ASE);
+            String encode = Base64.encodeBase64String(byte_ASE);
             encode = encode.replaceAll("\r|\n", "");
             out.write(encode.getBytes(GlobalConstants.UTF8));
             out.flush();
@@ -99,7 +98,7 @@ public class Aes256Tool {
             }
             //解密
             String data = new String(dataBytes, GlobalConstants.UTF8);
-            byte[] byte_ASE = new BASE64Decoder().decodeBuffer(data);
+            byte[] byte_ASE = Base64.decodeBase64(data);
             out.write(getDeCipher().doFinal(byte_ASE));
             out.flush();
         } catch (Exception e) {
@@ -119,11 +118,11 @@ public class Aes256Tool {
 
     public static String encrypt(String data) throws Exception {
         byte[] byte_ASE = getEnCipher().doFinal(data.getBytes(GlobalConstants.UTF8));
-        return new BASE64Encoder().encode(byte_ASE);
+        return Base64.encodeBase64String(byte_ASE);
     }
 
     public static byte[] decrypt(String data) throws Exception {
-        byte[] bytes = new BASE64Decoder().decodeBuffer(data);
+        byte[] bytes = Base64.decodeBase64(data);
         return getDeCipher().doFinal(bytes);
     }
 
