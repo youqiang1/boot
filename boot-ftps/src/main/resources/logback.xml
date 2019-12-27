@@ -21,10 +21,25 @@
         </encoder>
     </appender>
 
+    <appender name="file.log.balance" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <append>true</append>
+        <file>./logs/ing/balance.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>./logs/balance/%d{yyyyMMdd}.balance.log
+            </fileNamePattern>
+        </rollingPolicy>
+        <encoder>
+            <pattern>[%d %-5level %t %logger{1}] %msg%n</pattern>
+        </encoder>
+    </appender>
+
     <root>
         <level value="INFO"/>
         <appender-ref ref="file.log.sys"/>
         <appender-ref ref="stdout"/>
     </root>
+    <logger name="balance" level="INfo" additivity="false">
+        <appender-ref ref="file.log.balance" />
+    </logger>
 
 </configuration>
