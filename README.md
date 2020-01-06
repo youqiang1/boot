@@ -173,4 +173,9 @@ springboot
     名称：boot-freemarker
     描述：simple spring boot + freemarker
     http端口：16097
+                 
+####boot-dfs
+    名称：boot-dfs
+    描述：simple spring boot + fastDFS
+    http端口：16098
        

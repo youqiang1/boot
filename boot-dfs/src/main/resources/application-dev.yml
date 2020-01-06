@@ -1,0 +1,12 @@
+﻿server:
+  port: 16098
+  context-path: /
+
+spring:
+  application:
+    name: boot-dfs
+  servlet:
+    http:
+      multipart:
+        max-file-size: 10MB
+        max-request-size: 10MB
