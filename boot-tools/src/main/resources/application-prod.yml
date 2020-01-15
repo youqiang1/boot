@@ -1,0 +1,15 @@
+﻿server:
+  port: 16100
+  context-path: /
+
+spring:
+  application:
+    name: boot-tools
+  data:
+    elasticsearch:
+      cluster-nodes: 172.16.1.101:9301
+      cluster-name: dc-es
+      repositories:
+        enabled: true
+
+excelPath: /home/unioncloud/apps/data/excel/

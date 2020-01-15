@@ -24,6 +24,16 @@ public class ElasticsearchConstant {
      */
     public static final String USER_TYPE = "user_type";
 
+    /**
+     * 语音话单源数据 index
+     */
+    public static final String VOICE_INDEX = "index_voice1119";
+
+    /**
+     * 语音话单源数据 type
+     */
+    public static final String VOICE_TYPE = "type_voice1119";
+
     //region  the http method
     public static final String METHOD_PUT = "PUT";
 

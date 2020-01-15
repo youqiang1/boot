@@ -1,0 +1,15 @@
+﻿server:
+  port: 16100
+  context-path: /
+
+spring:
+  application:
+    name: boot-tools
+  data:
+    elasticsearch:
+      cluster-nodes: 192.168.1.204:9300
+      cluster-name: elasticsearch
+      repositories:
+        enabled: true
+
+excelPath: D:\temp\easyexcel\
