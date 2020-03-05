@@ -4,13 +4,18 @@ import com.alibaba.excel.ExcelReader;
 import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.metadata.BaseRowModel;
 import com.alibaba.excel.metadata.Sheet;
+import com.alibaba.excel.metadata.Table;
 import com.alibaba.excel.support.ExcelTypeEnum;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.google.common.collect.Lists;
+import com.yq.easyexcel.db.User;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.util.List;
+import java.util.*;
 
 /**
  * <p> excel操作工具类</p>
@@ -99,7 +104,7 @@ public class ExcelUtils {
      * @author youq  2019/5/14 14:12
      */
     public static void writeExcel2(HttpServletResponse response, List<? extends BaseRowModel> list,
-                                  String filename, String sheetName, BaseRowModel rowModel, int sheetNo) {
+                                   String filename, String sheetName, BaseRowModel rowModel, int sheetNo) {
         ExcelWriter writer = new ExcelWriter(getOutputStream(filename, response), ExcelTypeEnum.XLSX);
         Sheet sheet = new Sheet(sheetNo, 0, rowModel.getClass());
         sheet.setSheetName(sheetName);
@@ -161,7 +166,7 @@ public class ExcelUtils {
      * @return com.alibaba.excel.ExcelReader
      * @author youq  2019/5/14 12:20
      */
-    private static ExcelReader getReader(MultipartFile excel, ExcelListener excelListener) {
+    public static ExcelReader getReader(MultipartFile excel, ExcelListener excelListener) {
         String filename = excel.getOriginalFilename();
         if (StringUtils.isEmpty(filename)
                 || (!filename.toLowerCase().endsWith(".xls") && (!filename.toLowerCase().endsWith(".xlsx")))) {
@@ -174,6 +179,56 @@ public class ExcelUtils {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static void writeUserExcel(HttpServletResponse response, List<User> users, String filename, String sheetName) {
+        List<List<Object>> list = Lists.newArrayListWithCapacity(users.size());
+        Map<Integer, String> field = new HashMap<>();
+        for (User u : users) {
+            List<Object> row = new ArrayList<>();
+            row.add(u.getUsername());
+            row.add(u.getPhone());
+            row.add(u.getAge());
+            row.add(u.getEmail());
+            row.add(u.getSex());
+            if (org.apache.commons.lang3.StringUtils.isNotBlank(u.getJsonName())) {
+                JSONObject jsonObject = JSON.parseObject(u.getJson());
+                JSONObject definedMark = JSON.parseObject(u.getDefinedMark());
+                for (int i = 1; i <= 5; i++) {
+                    for (String key : u.getJsonName().split(",")) {
+                        Integer mark = definedMark.getInteger(key);
+                        if (mark == i) {
+                            field.put(mark, key);
+                            row.add(jsonObject.get(key));
+                            break;
+                        }
+                    }
+                }
+            }
+            list.add(row);
+        }
+        ExcelWriter writer = new ExcelWriter(getOutputStream(filename, response), ExcelTypeEnum.XLSX);
+        // 表单
+        Sheet sheet = new Sheet(1, 0);
+        sheet.setSheetName(sheetName);
+        // 创建一个表格
+        Table table = new Table(1);
+        // 动态添加 表头 headList --> 所有表头行集合
+        List<List<String>> headList = new ArrayList<>();
+        headList.add(Collections.singletonList("姓名"));
+        headList.add(Collections.singletonList("手机号"));
+        headList.add(Collections.singletonList("年龄"));
+        headList.add(Collections.singletonList("邮箱"));
+        headList.add(Collections.singletonList("性别"));
+        for (int i = 1; i <= 5; i++) {
+            if (org.apache.commons.lang3.StringUtils.isNotBlank(field.get(i))) {
+                headList.add(Collections.singletonList(field.get(i)));
+            }
+        }
+        table.setHead(headList);
+        //写数据
+        writer.write1(list, sheet, table);
+        writer.finish();
     }
 
 }
