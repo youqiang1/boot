@@ -178,4 +178,9 @@ springboot
     名称：boot-dfs
     描述：simple spring boot + fastDFS
     http端口：16098
+                       
+####boot-mqtt-client
+    名称：boot-mqtt-client
+    描述：simple spring boot + mqtt client
+    http端口：16099
        

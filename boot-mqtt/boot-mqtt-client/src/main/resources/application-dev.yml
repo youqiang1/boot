@@ -1,0 +1,21 @@
+﻿﻿server:
+  port: 16099
+  context-path: /
+spring:
+  application:
+    name: boot-mqtt-client
+#mqtt相关配置
+mqtt:
+  server:
+    url:
+    key:
+  client:
+    id: test_client_id
+    username: Device Test2
+    password: 123456
+    caCertFilePath: /gaiotca.crt
+    certFilePath: /device-test2.crt
+    KeyFilePath: /device-test2.key
+    defaultTopic: Topic_Test_1
+    maxInflight: 1000
+    clearSession: true
