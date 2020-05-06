@@ -34,8 +34,9 @@ public class Command01 implements SortableCommand {
         if (context instanceof UserContext) {
             UserContext uctx = (UserContext) context;
             uctx.setSex(SexEnum.MALE);
-            log.info("name: {}", uctx.getName());
+            log.info("name: {}, {}", uctx.getName(), context.get("name"));
         }
+        context.put("step", getSequence());
         return false;
     }
 

@@ -30,8 +30,15 @@ public class TestFilter implements Filter {
         if (exception == null) {
             return true;
         }
-        log.error("chain exception: ", exception);
-        return false;
+        Integer step = (Integer) context.get("step");
+        log.error("chain exception: {}", exception.toString());
+        if (step == null || step < 2) {
+            log.info("抛出");
+            return false;
+        } else {
+            log.info("憋着不抛出");
+            return true;
+        }
     }
 
     @Override

@@ -31,6 +31,9 @@ public class Command02 implements SortableCommand {
         Object test = context.get("test");
         log.info("command02 execute");
         log.info("传参打印：{}", test);
+        context.put("step", getSequence());
+        int[] i = {1};
+        System.out.println(i[1]);
         return false;
     }
 

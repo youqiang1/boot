@@ -3,6 +3,7 @@ package com.yq.swagger.controller;
 import com.yq.kernel.enu.SexEnum;
 import com.yq.kernel.model.ResultData;
 import com.yq.swagger.controller.qo.UserQO;
+import com.yq.swagger.controller.vo.UserVO;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -48,18 +49,25 @@ public class DemoController {
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "header", name = "username", dataType = "String", required = true, value = "用户名", defaultValue = "youq"),
             @ApiImplicitParam(paramType = "query", name = "password", dataType = "String", required = true, value = "密码", defaultValue = "123456"),
-            @ApiImplicitParam(paramType = "query", name = "sex", dataType = "String", required = true, value = "密码", defaultValue = "MALE", allowableValues = "MALE, FEMALE")
+            @ApiImplicitParam(paramType = "query", name = "sex", dataType = "String", required = true, value = "性别", defaultValue = "MALE", allowableValues = "MALE, FEMALE")
     })
     @ApiResponses({
             @ApiResponse(code = 400, message = "请求参数不完整"),
-            @ApiResponse(code = 404, message = "没有找到请求路径或者页面跳转路径不对")
+            @ApiResponse(code = 404, message = "没有找到请求路径或者页面跳转路径不对"),
+            @ApiResponse(code = 200, message = "成功", response = UserVO.class)
     })
     @PostMapping("/test1")
-    public ResultData<?> test1(@RequestHeader("username") String username,
+    public ResultData<UserVO> test1(@RequestHeader("username") String username,
                                @RequestParam("password") String password,
                                @RequestParam("sex") SexEnum sex) {
         log.info("username: {}, password: {}, sex: {}", username, password, sex);
-        return ResultData.success();
+        return ResultData.success(
+                UserVO.builder()
+                        .username(username)
+                        .password(password)
+                        .sex(sex)
+                        .build()
+        );
     }
 
     @ApiOperation(value = "测试方法2", notes = "请求参数实体测试")

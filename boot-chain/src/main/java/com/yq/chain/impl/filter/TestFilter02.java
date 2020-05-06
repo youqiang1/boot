@@ -18,7 +18,7 @@ public class TestFilter02 implements Filter {
         if (exception == null) {
             return true;
         }
-        log.error("chain exception: ", exception);
+        log.error("chain filter02 exception: ", exception);
         return false;
     }
 
