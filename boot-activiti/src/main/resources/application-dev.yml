@@ -1,0 +1,32 @@
+﻿server:
+  port: 16100
+spring:
+  application:
+    name: boot-activiti
+  datasource:
+    url: jdbc:mysql://localhost:3306/activiti_dev?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8
+    username: root
+    password: root
+    driverClassName: com.mysql.jdbc.Driver
+    tomcat:
+      validation-query: SELECT 1
+      test-while-idle: true
+  jpa:
+    hibernate.ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
+
+  activiti:
+    #是否每次都更新数据库
+    database-schema-update: true
+    #自动部署验证设置:true-开启（默认）、false-关闭
+    check-process-definitions: false
+    #指定activiti流程描述文件的前缀（即路径），启动时，activiti就会去寻找此路径下的流程描述文件，并且自动部署
+    process-definition-location-prefix: classpath:/processes/
+    #suffix 是一个String数组，表示描述文件的默    认后缀名，默认以上两种。
+    #process-definition-location-suffixes: .bpmn
+    history-level: full
+    db-identity-used: false
+
