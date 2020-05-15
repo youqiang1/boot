@@ -12,7 +12,7 @@ spring:
       validation-query: SELECT 1
       test-while-idle: true
   jpa:
-    hibernate.ddl-auto: update
+    hibernate.ddl-auto: none
     show-sql: true
     properties:
       hibernate:

@@ -1,6 +1,7 @@
 package com.yq.activiti.service;
 
 import com.google.common.collect.Maps;
+import com.yq.activiti.common.constant.ActivitiConstant;
 import com.yq.activiti.entity.Activiti;
 import com.yq.activiti.entity.ActivitiTask;
 import com.yq.activiti.util.ActivitiUtil;
@@ -30,8 +31,6 @@ import java.util.*;
 @Slf4j
 @Service
 public class ActivitiService {
-
-    private static final String PROCESS_DEFINE_KEY = "testProcess";
 
     private static final String NEXT_ASSIGNEE = "youq";
 
@@ -94,7 +93,7 @@ public class ActivitiService {
 
     public List<Activiti> myActivitiRecord(String username) {
         List<HistoricProcessInstance> historicProcessInstances = historyService.createHistoricProcessInstanceQuery()
-                .processDefinitionKey(PROCESS_DEFINE_KEY)
+                .processDefinitionKey(ActivitiConstant.TEST_PROCESS_DEFINE_KEY)
                 .startedBy(username)
                 .finished()
                 .orderByProcessInstanceEndTime()
@@ -116,7 +115,9 @@ public class ActivitiService {
 
     public List<Activiti> myApprovalRecord(String username) {
         List<HistoricProcessInstance> hisProInstance = historyService.createHistoricProcessInstanceQuery()
-                .processDefinitionKey(PROCESS_DEFINE_KEY).involvedUser(username).finished()
+                .processDefinitionKey(ActivitiConstant.TEST_PROCESS_DEFINE_KEY)
+                .involvedUser(username)
+                .finished()
                 .orderByProcessInstanceEndTime().desc().list();
 
         List<String> auditTaskNameList = new ArrayList<>();
@@ -164,7 +165,7 @@ public class ActivitiService {
             //用了设置启动流程的人员ID，引擎会自动吧用户ID保存到activiti:initiator中
             identityService.setAuthenticatedUserId(username);
             //开始流程
-            ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(PROCESS_DEFINE_KEY);
+            ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(ActivitiConstant.TEST_PROCESS_DEFINE_KEY);
             String processId = processInstance.getId();
             log.info("流程id：{}", processId);
             //查询当前任务
