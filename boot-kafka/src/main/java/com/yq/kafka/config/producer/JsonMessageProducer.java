@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
-public class JsonProducer {
+public class JsonMessageProducer {
 
     @Value("${kafka.topic.producer}")
     private String topic;

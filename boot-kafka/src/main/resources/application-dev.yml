@@ -5,9 +5,9 @@ spring:
   application:
     name: boot-kafka
 kafka:
-  brokers: 192.168.101.168:9092
+  brokers: 192.168.101.3:9092
   topic:
-    consumer: user-t
+    consumer: test
     singleConsumerGroupId: SingleConsumer
     multiConsumerGroupId: MultiConsumer
-    producer: user-t
+    producer: test

@@ -44,7 +44,7 @@ public class KafkaConfig {
      * <p> consumer对象init 单线程处理</p>
      * @author youq  2019/4/10 10:37
      */
-    @Bean
+//    @Bean
     public UserMessageSingleConsumer userSingleConsumerStart() {
         UserMessageSingleConsumer messageConsumer =
                 new UserMessageSingleConsumer(brokers, consumerTopic, singleConsumerGroup, messageHandler);
@@ -56,7 +56,7 @@ public class KafkaConfig {
      * <p> consumer对象init 多线程处理</p>
      * @author youq  2019/4/10 10:37
      */
-    @Bean
+//    @Bean
     public UserMessageMultiConsumer userMultiConsumerStart() {
         UserMessageMultiConsumer messageConsumer =
                 new UserMessageMultiConsumer(brokers, consumerTopic, multiConsumerGroup);
@@ -95,7 +95,7 @@ public class KafkaConfig {
     public KafkaProducer<Integer, Object> jsonProducer() {
         Properties props = new Properties();
         props.put("bootstrap.servers", brokers);
-        props.put("client.id", "JsonProducer");
+        props.put("client.id", "JsonProducerKey");
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, IntegerSerializer.class);
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
         return new KafkaProducer<>(props);
