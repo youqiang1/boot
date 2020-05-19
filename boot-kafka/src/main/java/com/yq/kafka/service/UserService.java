@@ -1,5 +1,7 @@
 package com.yq.kafka.service;
 
+import com.yq.kafka.config.model.JsonRequest;
+import com.yq.kafka.config.producer.JsonProducer;
 import com.yq.kafka.config.producer.UserMessageProducer;
 import com.yq.kafka.proto.user.UserMessage;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +19,9 @@ public class UserService {
     @Autowired
     private UserMessageProducer userMessageProducer;
 
+    @Autowired
+    private JsonProducer jsonProducer;
+
     /**
      * <p> 消息发送</p>
      * @param userMessage protobuf消息体
@@ -24,6 +29,10 @@ public class UserService {
      */
     public void send(UserMessage.user userMessage) {
         userMessageProducer.send(userMessage);
+    }
+
+    public void sendForJson(JsonRequest request) {
+        jsonProducer.send(request);
     }
 
 }

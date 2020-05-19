@@ -1,5 +1,7 @@
 package com.yq.kafka.controller;
 
+import com.yq.kafka.config.model.JsonRequest;
+import com.yq.kafka.config.model.JsonResultRequest;
 import com.yq.kafka.proto.user.UserMessage;
 import com.yq.kafka.service.UserService;
 import com.yq.kernel.constants.GlobalConstants;
@@ -46,6 +48,31 @@ public class UserController {
                                 .build())
                 .build();
         userService.send(userMessage);
+        return GlobalConstants.SUCCESS;
+    }
+
+    @RequestMapping("/jsonSend")
+    public String jsonSend() {
+        //result
+        JsonResultRequest result = JsonResultRequest.builder()
+                .createTime("2019-06-28 15:12:32")
+                .type("3")
+                .deviceId("14102416962000000001")
+                .wifiId("wifi-01")
+                .mac("C08135131DA5")
+                .brand("")
+                .signalIntensity("0")
+                .company("xwg")
+                .build();
+        //send
+        userService.sendForJson(
+                //json对象
+                JsonRequest.builder()
+                        .type("102_3")
+                        .code("0")
+                        .result(result)
+                        .build()
+        );
         return GlobalConstants.SUCCESS;
     }
 
