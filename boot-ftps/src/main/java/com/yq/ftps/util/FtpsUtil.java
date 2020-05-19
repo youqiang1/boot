@@ -82,6 +82,13 @@ public class FtpsUtil {
         return sftp;
     }
 
+    public void cd(String directory) throws SftpException {
+        if (!exist(directory)) {
+            sftp.mkdir(directory);
+        }
+        sftp.cd(directory);
+    }
+
     public void portForwardingL(int lport, String rhost, int rport) throws JSchException {
         int assignedPort = session.setPortForwardingL(lport, rhost, rport);
         log.info("localhost:{} -> {}:{}", assignedPort, rhost, rport);
@@ -102,56 +109,46 @@ public class FtpsUtil {
 
     /**
      * <p> 上传文件</p>
-     * @param directory  上传的目录
      * @param uploadFile 上传的文件
      * @author youq  2019/9/6 18:30
      */
-    public void upload(String directory, String uploadFile) throws Exception {
-        sftp.cd(directory);
+    public void upload(String uploadFile) throws Exception {
         File file = new File(uploadFile);
         sftp.put(new FileInputStream(file), file.getName());
     }
 
     /**
      * <p> 上传文件</p>
-     * @param directory 上传的目录
      * @param file      上传的文件
      * @author youq  2019/9/6 18:30
      */
-    public void upload(String directory, File file) throws Exception {
-        sftp.cd(directory);
+    public void upload(File file) throws Exception {
         sftp.put(new FileInputStream(file), file.getName());
     }
 
     /**
      * <p> 上传文件</p>
-     * @param directory 上传的目录
      * @param file      上传的文件
      * @author youq  2019/9/6 18:30
      */
-    public void upload(String directory, MultipartFile file, String filename) throws Exception {
-        sftp.cd(directory);
+    public void upload(MultipartFile file, String filename) throws Exception {
         sftp.put(file.getInputStream(), filename);
     }
 
     /**
      * <p> 上传整个文件夹</p>
      * @param src 文件夹
-     * @param dst 目标目录
      * @author youq  2019/9/6 19:43
      */
-    public void uploadDir(File src, String dst) throws Exception {
-        if (!exist(dst)) {
-            sftp.mkdir(dst);
-        }
+    public void uploadDir(File src) throws Exception {
         if (src.isFile()) {
-            upload(dst, src);
+            upload(src);
         } else {
             for (File file : src.listFiles()) {
                 if (file.isDirectory()) {
-                    uploadDir(file, dst + "/" + file.getName());
+                    uploadDir(file);
                 }
-                upload(dst, file);
+                upload(file);
             }
         }
     }
@@ -180,26 +177,22 @@ public class FtpsUtil {
 
     /**
      * <p> 下载文件</p>
-     * @param directory    文件夹
      * @param downloadFile 下载的文件
      * @param saveFile     保存的文件名
      * @author youq  2019/9/6 19:44
      */
-    public void download(String directory, String downloadFile, String saveFile) throws Exception {
-        sftp.cd(directory);
+    public void download(String downloadFile, String saveFile) throws Exception {
         File file = new File(saveFile);
         sftp.get(downloadFile, new FileOutputStream(file));
     }
 
     /**
      * <p> 下载文件</p>
-     * @param directory    文件夹
      * @param downloadFile 下载的文件
      * @param saveFile     保存的文件
      * @author youq  2019/9/6 19:44
      */
-    public void download(String directory, String downloadFile, File saveFile) throws Exception {
-        sftp.cd(directory);
+    public void download(String downloadFile, File saveFile) throws Exception {
         sftp.get(downloadFile, new FileOutputStream(saveFile));
     }
 
@@ -225,19 +218,17 @@ public class FtpsUtil {
             if (lsEntry.getLongname().startsWith("d")) {
                 downloadDir(src + "/" + lsEntry.getFilename(), new File(dst, lsEntry.getFilename()));
             } else {
-                download(src, lsEntry.getFilename(), new File(dst, lsEntry.getFilename()));
+                download(lsEntry.getFilename(), new File(dst, lsEntry.getFilename()));
             }
         }
     }
 
     /**
      * <p> 删除文件</p>
-     * @param directory  文件夹
      * @param deleteFile 文件
      * @author youq  2019/9/6 19:46
      */
-    public void delete(String directory, String deleteFile) throws SftpException {
-        sftp.cd(directory);
+    public void delete(String deleteFile) throws SftpException {
         sftp.rm(deleteFile);
     }
 

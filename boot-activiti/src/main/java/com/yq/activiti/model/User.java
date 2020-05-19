@@ -1,4 +1,4 @@
-package com.yq.activiti.entity;
+package com.yq.activiti.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

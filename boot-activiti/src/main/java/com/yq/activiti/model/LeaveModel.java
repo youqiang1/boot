@@ -1,4 +1,4 @@
-package com.yq.activiti.entity;
+package com.yq.activiti.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.yq.activiti.common.enu.ReviewStatusEnum;

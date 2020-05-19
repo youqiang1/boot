@@ -7,8 +7,8 @@ spring:
 #mqtt相关配置
 mqtt:
   server:
-    url:
-    key:
+    url: ssl://work.kydee.cn:9091
+    key: \\XuD[9k^`sF*vc
   client:
     id: test_client_id
     username: Device Test2

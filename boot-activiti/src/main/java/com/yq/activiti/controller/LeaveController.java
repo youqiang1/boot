@@ -2,8 +2,8 @@ package com.yq.activiti.controller;
 
 import com.yq.activiti.controller.request.LeaveRequest;
 import com.yq.activiti.controller.request.ReviewRequest;
-import com.yq.activiti.entity.LeaveModel;
-import com.yq.activiti.entity.LeaveModelTask;
+import com.yq.activiti.model.LeaveModel;
+import com.yq.activiti.model.LeaveModelTask;
 import com.yq.activiti.service.LeaveService;
 import com.yq.kernel.model.ResultData;
 import lombok.extern.slf4j.Slf4j;
