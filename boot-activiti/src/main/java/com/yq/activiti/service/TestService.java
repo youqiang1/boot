@@ -90,7 +90,7 @@ public class TestService {
 
     public List<Activiti> myActivitiRecord(String username) {
         List<HistoricProcessInstance> historicProcessInstances = historyService.createHistoricProcessInstanceQuery()
-                .processDefinitionKey(ActivitiConstant.TEST_PROCESS_DEFINE_KEY)
+                .processDefinitionKey(ActivitiConstant.TEST_PROCESS_KEY)
                 .startedBy(username)
                 .finished()
                 .orderByProcessInstanceEndTime()
@@ -112,7 +112,7 @@ public class TestService {
 
     public List<Activiti> myApprovalRecord(String username) {
         List<HistoricProcessInstance> hisProInstance = historyService.createHistoricProcessInstanceQuery()
-                .processDefinitionKey(ActivitiConstant.TEST_PROCESS_DEFINE_KEY)
+                .processDefinitionKey(ActivitiConstant.TEST_PROCESS_KEY)
                 .involvedUser(username)
                 .finished()
                 .orderByProcessInstanceEndTime().desc().list();
@@ -162,7 +162,7 @@ public class TestService {
             //用了设置启动流程的人员ID，引擎会自动吧用户ID保存到activiti:initiator中
             identityService.setAuthenticatedUserId(username);
             //开始流程
-            ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(ActivitiConstant.TEST_PROCESS_DEFINE_KEY);
+            ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(ActivitiConstant.TEST_PROCESS_KEY);
             String processId = processInstance.getId();
             log.info("流程id：{}", processId);
             //查询当前任务

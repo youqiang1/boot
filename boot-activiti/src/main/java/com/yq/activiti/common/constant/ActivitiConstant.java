@@ -9,11 +9,16 @@ public class ActivitiConstant {
     /**
      * 请假流程定义的KEY
      */
-    public static final String LEAVE_PROCESS_DEFINE_KEY = "leaveProcess";
+    public static final String LEAVE_PROCESS_KEY = "leaveProcess";
 
     /**
      * 测试流程定义的key
      */
-    public static final String TEST_PROCESS_DEFINE_KEY = "testProcess";
+    public static final String TEST_PROCESS_KEY = "testProcess";
+
+    /**
+     * 反馈流程的key
+     */
+    public static final String FEEDBACK_PROCESS_KEY = "feedback1Process";
 
 }

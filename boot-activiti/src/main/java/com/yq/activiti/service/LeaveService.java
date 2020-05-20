@@ -105,7 +105,7 @@ public class LeaveService {
 
     public List<LeaveModel> myActivitiRecord(String username) {
         List<HistoricProcessInstance> historicProcessInstances = historyService.createHistoricProcessInstanceQuery()
-                .processDefinitionKey(ActivitiConstant.LEAVE_PROCESS_DEFINE_KEY)
+                .processDefinitionKey(ActivitiConstant.LEAVE_PROCESS_KEY)
                 .startedBy(username)
                 .finished()
                 .orderByProcessInstanceEndTime()
@@ -128,7 +128,7 @@ public class LeaveService {
     public List<LeaveModel> myApprovalRecord(String username) {
         User user = userService.findByUsername(username);
         List<HistoricProcessInstance> hisProInstance = historyService.createHistoricProcessInstanceQuery()
-                .processDefinitionKey(ActivitiConstant.LEAVE_PROCESS_DEFINE_KEY)
+                .processDefinitionKey(ActivitiConstant.LEAVE_PROCESS_KEY)
                 .involvedUser(user.getReviewLevel().name())
                 .finished()
                 .orderByProcessInstanceEndTime().desc().list();
@@ -159,7 +159,7 @@ public class LeaveService {
             //用了设置启动流程的人员ID，引擎会自动吧用户ID保存到activiti:initiator中
             identityService.setAuthenticatedUserId(request.getApplyUser());
             //开始请假流程
-            ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(ActivitiConstant.LEAVE_PROCESS_DEFINE_KEY);
+            ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(ActivitiConstant.LEAVE_PROCESS_KEY);
             String processId = processInstance.getId();
             log.info("流程id：{}", processId);
             //查询当前任务
@@ -182,7 +182,7 @@ public class LeaveService {
             //activitiProcess add
             Integer activitiProcessId = save(request, task.getId(), processId);
             //processTask add
-            processTaskService.save(activitiProcessId, ActivitiConstant.LEAVE_PROCESS_DEFINE_KEY, task.getId());
+            processTaskService.save(activitiProcessId, ActivitiConstant.LEAVE_PROCESS_KEY, task.getId());
             return true;
         } catch (Exception e) {
             log.error("开始请假流程异常：", e);
@@ -210,7 +210,7 @@ public class LeaveService {
         //activitiProcess update
         firstReviewUpdate(request, task.getId());
         //processTask update
-        processTaskService.update(request.getLeaveId(), ActivitiConstant.LEAVE_PROCESS_DEFINE_KEY, task.getId());
+        processTaskService.update(request.getLeaveId(), ActivitiConstant.LEAVE_PROCESS_KEY, task.getId());
         return true;
     }
 

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:tns="http://www.activiti.org/test" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" expressionLanguage="http://www.w3.org/1999/XPath" id="m1540349056414" name="" targetNamespace="http://www.activiti.org/test" typeLanguage="http://www.w3.org/2001/XMLSchema">
+  <process id="feedback1Process" isClosed="false" isExecutable="true" name="反馈流程" processType="None">
+    <startEvent id="start" name="开始"/>
+    <endEvent id="finish" name="结束"/>
+    <userTask activiti:exclusive="true" id="task0" name="知识反馈任务发起"/>
+    <userTask activiti:exclusive="true" activiti:formKey="终审" id="task1" name="一审"/>
+    <sequenceFlow id="_6" sourceRef="start" targetRef="task0"/>
+    <sequenceFlow id="_9" name="一审对知识反馈问题进行解答回复" sourceRef="task1" targetRef="task0">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${msg=='回复'||msg=='打回'}]]></conditionExpression>
+    </sequenceFlow>
+    <exclusiveGateway gatewayDirection="Unspecified" id="task0_gateway" name="网关"/>
+    <sequenceFlow id="_3" name="默认进入一审" sourceRef="task0" targetRef="task0_gateway"/>
+    <sequenceFlow id="_4" name="知识反馈发起，指派审核人员进行审核" sourceRef="task0_gateway" targetRef="task1">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${msg=='问题待解决'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="_5" name="知识反馈问题得到解决，流程结束" sourceRef="task0_gateway" targetRef="finish">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${msg=='问题已解决'}]]></conditionExpression>
+    </sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram documentation="background=#FFFFFF;count=1;horizontalcount=1;orientation=0;width=842.4;height=1195.2;imageableWidth=832.4;imageableHeight=1185.2;imageableX=5.0;imageableY=5.0" id="Diagram-_1" name="New Diagram">
+    <bpmndi:BPMNPlane bpmnElement="feedback1Process">
+      <bpmndi:BPMNShape bpmnElement="start" id="Shape-start">
+        <omgdc:Bounds height="32.0" width="32.0" x="160.0" y="285.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="32.0" width="32.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="finish" id="Shape-finish">
+        <omgdc:Bounds height="32.0" width="32.0" x="910.0" y="180.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="32.0" width="32.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="task0" id="Shape-task0">
+        <omgdc:Bounds height="70.0" width="135.0" x="330.0" y="275.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="70.0" width="135.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="task1" id="Shape-task1">
+        <omgdc:Bounds height="60.0" width="85.0" x="890.0" y="380.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="60.0" width="85.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="task0_gateway" id="Shape-task0_gateway" isMarkerVisible="false">
+        <omgdc:Bounds height="32.0" width="32.0" x="630.0" y="295.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="32.0" width="32.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="_3" id="BPMNEdge__3" sourceElement="task0" targetElement="task0_gateway">
+        <omgdi:waypoint x="465.0" y="310.0"/>
+        <omgdi:waypoint x="550.0" y="310.0"/>
+        <omgdi:waypoint x="631.0" y="310.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="0.0" width="2.0" x="0.0" y="15.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_4" id="BPMNEdge__4" sourceElement="task0_gateway" targetElement="task1">
+        <omgdi:waypoint x="645.0" y="326.0"/>
+        <omgdi:waypoint x="645.0" y="415.0"/>
+        <omgdi:waypoint x="890.0" y="415.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="0.0" width="47.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_5" id="BPMNEdge__5" sourceElement="task0_gateway" targetElement="finish">
+        <omgdi:waypoint x="645.0" y="296.0"/>
+        <omgdi:waypoint x="645.0" y="230.0"/>
+        <omgdi:waypoint x="910.0" y="196.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="0.0" width="50.0" x="0.0" y="1.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_6" id="BPMNEdge__6" sourceElement="start" targetElement="task0">
+        <omgdi:waypoint x="191.49193338482968" y="305.0"/>
+        <omgdi:waypoint x="265.0" y="305.0"/>
+        <omgdi:waypoint x="330.0" y="305.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_9" id="BPMNEdge__9" sourceElement="task1" targetElement="task0">
+        <omgdi:waypoint x="932.5" y="455.0"/>
+        <omgdi:waypoint x="498.0" y="505.0"/>
+        <omgdi:waypoint x="397.5" y="345.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="0.0" width="23.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>
