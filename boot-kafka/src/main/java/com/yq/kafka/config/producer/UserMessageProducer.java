@@ -4,7 +4,6 @@ import com.yq.kafka.proto.user.UserMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -19,7 +18,7 @@ public class UserMessageProducer {
     @Value("${kafka.topic.producer}")
     private String topic;
 
-    @Autowired
+    // @Autowired
     private KafkaProducer<Integer, UserMessage.user> userProducer;
 
     /**

@@ -11,3 +11,4 @@ kafka:
     singleConsumerGroupId: SingleConsumer
     multiConsumerGroupId: MultiConsumer
     producer: test
+  enable: false
