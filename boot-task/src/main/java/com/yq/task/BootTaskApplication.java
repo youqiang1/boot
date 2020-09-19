@@ -1,5 +1,6 @@
 package com.yq.task;
 
+import com.yq.kernel.constants.GlobalConstants;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.system.ApplicationPidFileWriter;
@@ -15,7 +16,7 @@ public class BootTaskApplication {
 
     public static void main(String[] args) {
         SpringApplication application = new SpringApplication(BootTaskApplication.class);
-        application.addListeners(new ApplicationPidFileWriter("application.pid"));
+        application.addListeners(new ApplicationPidFileWriter(GlobalConstants.PID_FILE_NAME));
         application.run(args);
     }
 

@@ -8,3 +8,9 @@ spring:
 test:
   str: 我是配置test.str的内容
   hello: 你好
+
+zip:
+  source: D:\yx
+  temp: D:\yx\1
+  target: D:\yx\2
+  password: RTYboyi@BJBY@)!(wx20200913@2020
